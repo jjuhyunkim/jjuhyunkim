@@ -1,5 +1,5 @@
 # Haplotype specific transcripts analysis wrapper. 
-This repo aims to discover and quantify the haplotype specific transcripts using Illumina short-read RNA data or HiFi data from VCFs or assemblies.
+This repository aims to discover and quantify haplotype-specific transcripts using Illumina short-read RNA data or HiFi data from VCFs or assemblies.
 
 ## Installation and dependencies.
 ```bash
@@ -12,9 +12,9 @@ cactus (if you start with assemblies)
 ## Run wrapper
 ### Start with using VCF and vg autoindex 
 #### Step 1.1 Phasing variants
-If you start with VCF files to build graph, you first need to phase the variants. and then could can use wrapper. 
+If you begin with VCF files to build the graph, you first need to phase the variants. Then, you can use the wrapper.
 
-In this documents, we used whatshap, but it would be okay if you use other tools to phase variants
+In this document, we used whatshap, but it would be okay to use other tools to phase variants.
 ```bash
 # Phase variants
 ```
@@ -49,6 +49,3 @@ sh ${script}/Mainscript.autoindexRun.sh \
   *  quantification file will be under 05.quantification directory and named $sample_prefix.aligned.gamp
 
 *  rna_fastq : if you have short-read paired RNA-seq data, give both of them at the end of the arguments. If you give only one fastq, this wrapper recognize that you give long read data.
-
-### Start with using assemblies and vg rna
-#### Step 2.1 Running wrapper
