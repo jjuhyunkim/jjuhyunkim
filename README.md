@@ -3,18 +3,17 @@
 
 
   Hi there 👋    
-  I'm graduate student in Seoul national univ.:mortar_board:   
-  Now I'm PhD candidate!
+  I'm a postdoc and bioinformatician. :mortar_board:   
 
 
   #### Educations 
   Soongsil University '15~'19 (B.S in Medical-biosystematics)         
-  Seoul National University '19~present (Department of Biomedical Sciences, Advisor = Jong-Il Kim, Ph.D.)
+  Seoul National University '19~`24 (Department of Biomedical Sciences, Advisor = Jong-Il Kim, Ph.D.)
   
   #### How to reach me :telephone:
-  <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=juhyunk@snu.ac.kr" target="_blank"><img src="https://img.shields.io/badge/juhyun.kim.0203@gmail.com-DB4437?style=flat-square&logo=gmail&logoColor=white"/>
+  <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=juhyun.kim.0203@gmail.com" target="_blank"><img src="https://img.shields.io/badge/juhyun.kim.0203@gmail.com-DB4437?style=flat-square&logo=gmail&logoColor=white"/>
   </a>
-  <a href="https://twitter.com/juhyunk_" target="_blank"><img src="https://img.shields.io/badge/juhyunk__-00ACEE?style=flat-square&logo=twitter&logoColor=white"/>
+  <a href="https://twitter.com/juhyunk_" target="_blank"><img src="https://img.shields.io/badge/juhyunk__-00ACEE?style=flat-square&logo=X&logoColor=white"/>
   </a>
 
   #### Skills & Languages :wrench:
@@ -22,6 +21,8 @@
   <img src="https://img.shields.io/badge/python-FFD43B?style=flat-square&logo=python&logoColor=white"/>
   <img src="https://img.shields.io/badge/R-4285F4?style=flat-square&logo=R&logoColor=white"/>
   <img src="https://img.shields.io/badge/bash-4EAA25?style=flat-square&logo=GNOMETerminal&logoColor=white"/> 
+  <img src="https://img.shields.io/badge/-Julia-9558B2?style=for-the-badge&logo=julia&logoColor=white" width="70" height="20"/>
+
   
   #### Analysis
   <img src="https://img.shields.io/badge/GWAS-FFF4DF?style=flat-square"/>
@@ -36,6 +37,7 @@
           
            
   [![jjuhyunkim's github stats](https://github-readme-stats.vercel.app/api/top-langs/?username=jjuhyunkim&show_icons=true&hide_border=true&title_color=004386&icon_color=004386&layout=compact)](https://github.com/jjuhyunkim)
+
 
 </a>
 </div>
