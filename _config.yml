@@ -8,12 +8,12 @@ url:                "https://jjuhyunkim.github.io/jjuhyunkim/"
 # Social Profiles
 twitter_username:   SBootstrap
 github_username:    StartBootstrap
-facebook_username:  StartBootstrap
-instagram_username:  
+# facebook_username:  StartBootstrap
+# instagram_username:  
 linkedin_username:
 
 # Add your google-analytics ID here to activate google analytics
-google_analytics:   UA-XXXXXXXXX-X # out your google-analytics code
+# google_analytics:   UA-XXXXXXXXX-X # out your google-analytics code
 
 # Build settings
 markdown:           kramdown
@@ -23,3 +23,6 @@ plugins:
   - jekyll-feed
   - jekyll-paginate
   - jekyll-sitemap ## Uncomment this line to silently generate a sitemaps.org compliant sitemap for your Jekyll site
+
+# Jekyll theme
+theme: startbootstrap-clean-blog-jekyll
