@@ -2,8 +2,8 @@ title:              Juhyun Kim's blog
 email:              juhyun.kim.0203@gmail.com
 description:        A Blog Theme by Start Bootstrap
 author:             Juhyun Kim
-baseurl:            "/startbootstrap-clean-blog-jekyll"
-url:                "https://jjuhyunkim.github.io/jjuhyunkim/"
+baseurl:            "/jjuhyunkim"
+url:                "https://jjuhyunkim.github.io/"
 
 # Social Profiles
 # twitter_username:   SBootstrap
