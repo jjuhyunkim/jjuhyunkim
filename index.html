@@ -156,7 +156,7 @@ button {
 
     {% for post in site.posts %}
     <div class="post" data-title="{{ post.title }}" data-tags="{{ post.tags | join: ' ' }}">
-      <a href="{{ post.url }}">{{ post.title }}</a>
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
 
       <div class="date">
         {{ post.date | date: "%Y-%m-%d" }}
