@@ -1,3 +1,9 @@
+---
+title: paper1
+date: 2027-06-23
+tags: [test]
+---
+
 # Paper Review Template (Biology / Bioinformatics)
 
 ## Basic Information
