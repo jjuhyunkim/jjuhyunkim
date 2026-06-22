@@ -1,7 +1,5 @@
 ---
-title: paper1
-date: 2027-06-20
-tags: paper
+layout: default
 ---
 
 # Paper Review Template (Biology / Bioinformatics)
@@ -226,7 +224,6 @@ Biological Interpretation
 
 ---
 
-
 # 8. Personal Notes
 
 ## Interesting Points
@@ -244,5 +241,4 @@ Biological Interpretation
 ## Ideas for My Research
 
 *
-
 ---
