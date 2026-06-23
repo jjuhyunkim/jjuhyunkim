@@ -1,0 +1,246 @@
+---
+title: paper1
+date: 2026-06-20
+tags: paper
+---
+
+# Paper Review Template (Biology / Bioinformatics)
+
+## Basic Information
+
+> citation
+
+tags : 
+
+---
+
+# 1. One-Sentence Summary
+
+> 이 논문은 _______________________________ 을(를) 규명/개발/분석하였다.
+
+---
+
+# 2. Background
+
+## Biological Problem
+
+* 연구 대상:
+* 중요성:
+* 기존 지식:
+* 아직 해결되지 않은 문제:
+
+
+# 3. Research Question
+
+### Main Question
+
+* 이 논문이 답하려는 핵심 질문은 무엇인가?
+
+### Hypothesis
+
+* 저자들이 검증하려는 가설은 무엇인가?
+
+---
+
+# 4. Methods
+
+## Experimental Design
+
+### Samples
+
+* Organism:
+* Cell type:
+* Sample size:
+* Controls:
+
+### Experimental Methods
+
+* [ ] RNA-seq
+* [ ] scRNA-seq
+* [ ] ChIP-seq
+* [ ] ATAC-seq
+* [ ] CRISPR
+* [ ] Proteomics
+* [ ] Microscopy
+* [ ] Animal model
+* [ ] Other:
+
+### Key Procedures
+
+1.
+2.
+3.
+
+---
+
+## Bioinformatics / Computational Analysis
+
+### Data Source
+
+* Public dataset:
+* Newly generated data:
+* Database:
+
+### Pipeline
+
+```text
+Raw Data
+ ↓
+QC
+ ↓
+Alignment
+ ↓
+Quantification
+ ↓
+Statistical Analysis
+ ↓
+Visualization
+ ↓
+Biological Interpretation
+```
+
+---
+
+# 5. Results
+
+## Figure-by-Figure Summary
+
+### Figure 1
+
+**Question**
+
+*
+
+**Method**
+
+*
+
+**Key Result**
+
+*
+
+**Interpretation**
+
+*
+
+---
+
+### Figure 2
+
+**Question**
+
+*
+
+**Method**
+
+*
+
+**Key Result**
+
+*
+
+**Interpretation**
+
+*
+
+---
+
+### Figure 3
+
+**Question**
+
+*
+
+**Method**
+
+*
+
+**Key Result**
+
+*
+
+**Interpretation**
+
+*
+
+---
+
+### Additional Figures
+
+(Repeat as needed)
+
+---
+
+# 6. Major Findings
+
+## Finding 1
+
+### Evidence
+
+*
+
+### Why Important?
+
+*
+
+---
+
+## Finding 2
+
+### Evidence
+
+*
+
+### Why Important?
+
+*
+
+---
+
+## Finding 3
+
+### Evidence
+
+*
+
+### Why Important?
+
+*
+
+---
+
+
+# 7. Biological Significance
+
+### What Did We Learn?
+
+*
+
+### Impact on the Field
+
+*
+
+### Clinical / Translational Relevance
+
+*
+
+---
+
+# 8. Personal Notes
+
+## Interesting Points
+
+*
+
+## Confusing Points
+
+*
+
+## New Techniques Learned
+
+*
+
+## Ideas for My Research
+
+*
+---
