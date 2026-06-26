@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ page.title }}</title>
+<link rel="stylesheet" href="{{ '/style.css' | relative_url }}">
+<style>
+.cv-page {
+  max-width: 1080px;
+  margin: 40px auto;
+  padding: 0 20px 56px;
+}
+
+.cv-hero,
+.cv-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-soft);
+}
+
+.cv-hero {
+  padding: 30px;
+  margin-bottom: 22px;
+  background: linear-gradient(180deg, var(--card), var(--panel));
+}
+
+.cv-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cv-kicker {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--subtext);
+  margin-bottom: 8px;
+}
+
+.cv-title {
+  margin: 0 0 10px;
+  font-size: 42px;
+  line-height: 1.08;
+}
+
+.cv-lead {
+  margin: 0;
+  max-width: 760px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--subtext);
+}
+
+.cv-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cv-link {
+  display: inline-block;
+  padding: 14px 18px;
+  border-radius: 16px;
+  text-decoration: none;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  font-weight: 600;
+}
+
+.cv-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.7fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.cv-column {
+  display: grid;
+  gap: 20px;
+}
+
+.cv-column.side {
+  position: sticky;
+  top: 24px;
+}
+
+.cv-card {
+  padding: 26px 28px;
+}
+
+.cv-card h2,
+.cv-card h3 {
+  margin-top: 0;
+}
+
+.cv-card h2 {
+  font-size: 24px;
+  margin-bottom: 14px;
+}
+
+.cv-card h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.cv-card p,
+.cv-card li,
+.cv-card ul,
+.cv-card ol,
+.cv-card div {
+  line-height: 1.8;
+  color: var(--text);
+}
+
+.cv-card ul,
+.cv-card ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.cv-quote {
+  padding: 16px 18px;
+  border-left: 4px solid var(--tag-text);
+  background: var(--panel);
+  border-radius: 0 14px 14px 0;
+}
+
+.cv-divider {
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+@media (max-width: 980px) {
+  .cv-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-column.side {
+    position: static;
+  }
+
+  .cv-title {
+    font-size: 34px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="cv-page">
+  <section class="cv-hero">
+    <div class="cv-topbar">
+      <div>
+        <div class="cv-kicker">Curriculum Vitae</div>
+        <h1 class="cv-title">{{ page.title }}</h1>
+        {% if page.description %}
+        <p class="cv-lead">{{ page.description }}</p>
+        {% endif %}
+      </div>
+      <div class="cv-actions">
+        <a href="{{ '/about/' | relative_url }}" class="cv-link">Back to About</a>
+        <button class="theme-toggle" type="button" data-theme-toggle>🌓</button>
+      </div>
+    </div>
+  </section>
+
+  {{ content }}
+</div>
+<script src="{{ '/script.js' | relative_url }}"></script>
+</body>
+</html>

@@ -22,6 +22,15 @@ body {
   padding: 0 20px 40px;
 }
 
+.hero {
+  background: linear-gradient(180deg, var(--card), var(--panel));
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow-soft);
+  padding: 26px 28px;
+  margin-bottom: 20px;
+}
+
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -53,7 +62,8 @@ h1 {
   padding: 20px;
   border-radius: 14px;
   margin-bottom: 14px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
 }
 
 .update-title {
@@ -94,18 +104,21 @@ h1 {
 
 <body>
 <div class="container">
-  <div class="topbar">
-    <div>
+  <div class="hero">
+    <div class="topbar">
+      <div>
       <h1>What's New</h1>
       <p class="subtitle">All updates, milestones, and recent events in reverse chronological order</p>
-    </div>
-    <div class="theme-toggle-row">
-      <a href="{{ '/' | relative_url }}">Back to home</a>
-      <button class="theme-toggle" type="button" data-theme-toggle>🌓</button>
+      </div>
+      <div class="theme-toggle-row">
+        <a href="{{ '/' | relative_url }}">Back to home</a>
+        <button class="theme-toggle" type="button" data-theme-toggle>🌓</button>
+      </div>
     </div>
   </div>
 
-  {% assign updates = site.whats_new | sort: 'date' | reverse %}
+  {% assign visible_updates = site.whats_new | where_exp: 'item', 'item.listed != false' %}
+  {% assign updates = visible_updates | sort: 'date' | reverse %}
   {% for item in updates %}
   {% assign item_tags_string = item.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
   {% assign item_tag_list = item_tags_string | split: '|' %}

@@ -105,7 +105,8 @@ h1 {
     </div>
   </div>
 
-  {% for post in site.posts %}
+  {% assign visible_posts = site.posts | where_exp: 'item', 'item.listed != false' %}
+  {% for post in visible_posts %}
   {% assign post_tags_string = post.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
   {% assign post_tag_list = post_tags_string | split: '|' %}
   <div class="post">

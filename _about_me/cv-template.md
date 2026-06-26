@@ -30,128 +30,197 @@ body.dark {
 	--hero-shadow: 0 16px 36px rgba(0,0,0,0.34);
 	--accent-soft: #1a2030;
 	--accent-panel: #171d2a;
+	layout: cv_page
+	description: Use this page as a polished template for an academic or research CV.
 	--accent-line: #5b6bdc;
-}
 
-.cv-page {
-	max-width: 1020px;
-	margin: 40px auto;
-	padding: 0 28px 56px;
-	color: var(--text);
-}
+	<div class="cv-grid">
+		<div class="cv-column side">
+			<section class="cv-card">
+				<h2>Basic Information</h2>
+				<div><strong>Name</strong><br>Your name</div>
+				<div><strong>Current position</strong><br>Your current title</div>
+				<div><strong>Affiliation</strong><br>Institution / lab / department</div>
+				<div><strong>Email</strong><br>your-email@example.com</div>
+				<div><strong>Website</strong><br>your-website</div>
+				<div><strong>GitHub</strong><br>github.com/your-id</div>
+				<div><strong>Google Scholar</strong><br>scholar profile link</div>
+				<div><strong>ORCID</strong><br>ORCID link</div>
+				<div><strong>Location</strong><br>City, Country</div>
+			</section>
 
-.cv-topbar {
-	display: flex;
-	justify-content: flex-end;
-	margin-bottom: 14px;
-}
+			<section class="cv-card">
+				<h2>Technical Skills</h2>
+				<strong>Programming</strong>
+				<ul>
+					<li>Python</li>
+					<li>R</li>
+					<li>Bash</li>
+					<li>SQL</li>
+				</ul>
+				<strong>Bioinformatics / Data Analysis</strong>
+				<ul>
+					<li>Genome assembly</li>
+					<li>Variant analysis</li>
+					<li>Methylation analysis</li>
+					<li>RNA-seq / single-cell analysis</li>
+					<li>Workflow management</li>
+				</ul>
+				<strong>Tools and Platforms</strong>
+				<ul>
+					<li>Git / GitHub</li>
+					<li>Linux / HPC</li>
+					<li>Docker / Singularity</li>
+					<li>Nextflow / Snakemake</li>
+					<li>Cloud or cluster environment</li>
+				</ul>
+			</section>
+		</div>
 
-.theme-toggle {
-	padding: 10px 12px;
-	border: none;
-	border-radius: 12px;
-	cursor: pointer;
-	background: var(--card);
-	color: var(--text);
-	box-shadow: var(--shadow);
-}
+		<div class="cv-column">
+			<section class="cv-card">
+				<h2>Research Summary</h2>
+				<p>Write a 3-5 sentence overview of your research background, main interests, and technical strengths.</p>
+				<div class="cv-quote">Example: I am a bioinformatics researcher working on cancer genomics, epigenomics, and long-read sequencing analysis. My work focuses on extracting biological insight from large-scale sequencing data and building reproducible computational workflows. I am especially interested in structural variation, methylation profiling, and assembly-based genome analysis.</div>
+			</section>
 
-.cv-hero,
-.cv-card,
-.cv-side-card,
-.reference-card,
-.callout,
-.back-link {
-	background: var(--card);
-	border: 1px solid var(--border);
-	box-shadow: var(--shadow);
-}
+			<section class="cv-card">
+				<h2>Selected Publications</h2>
+				<p>Put your strongest or most representative papers first. For an academic CV, this section usually carries more weight than a general skills summary.</p>
+				<h3>First-author or co-first-author publications</h3>
+				<ol>
+					<li>Your Name, Author, Author. Title. Journal. Year.</li>
+					<li>Your Name, Author, Author. Title. Journal. Year.</li>
+				</ol>
+				<h3>Co-author publications</h3>
+				<ol>
+					<li>Author, Your Name, Author. Title. Journal. Year.</li>
+					<li>Author, Your Name, Author. Title. Journal. Year.</li>
+				</ol>
+				<h3>Preprints and manuscripts in preparation</h3>
+				<ol>
+					<li>Authors. Title. bioRxiv / submitted / in preparation. Year.</li>
+				</ol>
+			</section>
 
-.cv-hero {
-	background: linear-gradient(180deg, var(--card), var(--accent-soft));
-	border-radius: 26px;
-	padding: 34px 32px;
-	box-shadow: var(--hero-shadow);
-	margin-bottom: 22px;
-}
+			<section class="cv-card">
+				<h2>Education</h2>
+				<div class="cv-divider">
+					<strong>Degree / Program</strong><br>
+					Institution: University name<br>
+					Department / Program: Department or graduate program<br>
+					Period: YYYY.MM - YYYY.MM<br>
+					Advisor: Advisor name<br>
+					Thesis / Dissertation: Thesis or dissertation title
+				</div>
+				<div>
+					<strong>Degree / Program</strong><br>
+					Institution: University name<br>
+					Department / Program: Department or graduate program<br>
+					Period: YYYY.MM - YYYY.MM<br>
+					Advisor: Advisor name<br>
+					Thesis / Dissertation: Thesis or dissertation title
+				</div>
+			</section>
 
-.cv-hero-inner {
-	display: flex;
-	justify-content: space-between;
-	gap: 16px;
-	align-items: flex-start;
-	flex-wrap: wrap;
-}
+			<section class="cv-card">
+				<h2>Academic and Professional Appointments</h2>
+				<div class="cv-divider">
+					<strong>Job title</strong><br>
+					Institution or company: Name of institution or company<br>
+					Period: YYYY.MM - YYYY.MM<br>
+					Team / Lab: Team or lab name
+					<ul>
+						<li>Responsibility or scope of work</li>
+						<li>Outcome, contribution, or deliverable</li>
+					</ul>
+				</div>
+				<div>
+					<strong>Job title</strong><br>
+					Institution or company: Name of institution or company<br>
+					Period: YYYY.MM - YYYY.MM<br>
+					Team / Lab: Team or lab name
+					<ul>
+						<li>Responsibility or scope of work</li>
+						<li>Outcome, contribution, or deliverable</li>
+					</ul>
+				</div>
+			</section>
 
-.eyebrow {
-	font-size: 12px;
-	letter-spacing: 0.14em;
-	text-transform: uppercase;
-	color: var(--subtext);
-	margin-bottom: 10px;
-}
+			<section class="cv-card">
+				<h2>Research Experience</h2>
+				<div>
+					<strong>Project or topic</strong><br>
+					Period: YYYY.MM - YYYY.MM<br>
+					Biological question: What problem did this project address?<br>
+					Data types: WGS, RNA-seq, methylation, Hi-C, long-read, etc.<br>
+					Methods: Assembly, alignment, statistical modeling, workflow development<br>
+					Main outcome: One or two lines describing the result
+				</div>
+				<div>
+					<strong>Project or topic</strong><br>
+					Period: YYYY.MM - YYYY.MM<br>
+					Biological question: What problem did this project address?<br>
+					Data types: WGS, RNA-seq, methylation, Hi-C, long-read, etc.<br>
+					Methods: Assembly, alignment, statistical modeling, workflow development<br>
+					Main outcome: One or two lines describing the result
+				</div>
+			</section>
 
-.cv-title {
-	margin: 0 0 10px;
-	font-size: 42px;
-	line-height: 1.08;
-	color: var(--text);
-}
+			<section class="cv-card">
+				<h2>Presentations, Awards, Grants, and Service</h2>
+				<div class="cv-divider">
+					<strong>Presentations</strong>
+					<ul>
+						<li>Invited talk, host institution or seminar series, location, year</li>
+						<li>Conference talk, meeting name, location, year</li>
+						<li>Poster, meeting name, location, year</li>
+					</ul>
+				</div>
+				<div class="cv-divider">
+					<strong>Awards and Honors</strong>
+					<ul>
+						<li>Award name, organization, year</li>
+						<li>Fellowship name, organization, year</li>
+					</ul>
+				</div>
+				<div class="cv-divider">
+					<strong>Grants or Funded Projects</strong>
+					<ul>
+						<li>Project title, role, funder, amount if relevant, year</li>
+						<li>Project title, role, funder, year</li>
+					</ul>
+				</div>
+				<div>
+					<strong>Teaching, Mentoring, and Service</strong>
+					<ul>
+						<li>Course or workshop, role, year</li>
+						<li>Student mentoring, role, year</li>
+						<li>Reviewer or committee role, organization, year</li>
+						<li>Community contribution, year</li>
+					</ul>
+				</div>
+			</section>
 
-.hero-copy,
-.cv-copy,
-.cv-list,
-.side-grid {
-	color: var(--muted);
-}
-
-.hero-copy {
-	margin: 0;
-	max-width: 720px;
-	font-size: 16px;
-	line-height: 1.7;
-}
-
-.back-link {
-	display: inline-block;
-	padding: 14px 18px;
-	border-radius: 16px;
-	color: var(--text);
-	text-decoration: none;
-	font-weight: 600;
-	<style>
-	.cv-page {
-		--bg: #f6f7fb;
-		--card: #ffffff;
-		--card-soft: linear-gradient(180deg, #ffffff, #f7f8fc);
-		--text: #111;
-		--muted: #5b6472;
-		--subtext: #666;
-		--border: rgba(0, 0, 0, 0.06);
-		--shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
-		--shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.06);
-		--accent-soft: #eef2ff;
-		--accent-line: #c7d2fe;
-		max-width: 1020px;
-		margin: 40px auto;
-		padding: 0 28px 56px;
-		color: var(--text);
-	}
-
-	.cv-page.dark {
-		--bg: #0f1117;
-		--card: #161922;
-		--card-soft: linear-gradient(180deg, #171b24, #12161d);
-		--text: #e6e6e6;
-		--muted: #b6beca;
-		--subtext: #9aa3b2;
-		--border: rgba(255, 255, 255, 0.08);
-		--shadow: 0 16px 36px rgba(0, 0, 0, 0.32);
-		--shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.24);
-		--accent-soft: #222a3a;
-		--accent-line: #4f67a8;
-	}
-
+			<section class="cv-card">
+				<h2>References</h2>
+				<div class="cv-divider">
+					<strong>Reference name</strong><br>
+					Position: Professor / PI / Senior Scientist<br>
+					Institution: Institution name<br>
+					Email: contact email<br>
+					Relationship: Advisor / collaborator / supervisor
+				</div>
+				<div>
+					<strong>Reference name</strong><br>
+					Position: Professor / PI / Senior Scientist<br>
+					Institution: Institution name<br>
+					Email: contact email<br>
+					Relationship: Advisor / collaborator / supervisor
+				</div>
+			</section>
+		</div>
+	</div>
 	.cv-page,
 	.cv-page * {
 		box-sizing: border-box;

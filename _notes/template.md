@@ -2,6 +2,7 @@
 title: note title
 createdate: 2026-06-26
 lasteditdate: 2026-06-26
+listed: false
 tags:
   - project
   - method

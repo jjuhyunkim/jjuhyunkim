@@ -135,7 +135,9 @@ h1, h2, h3 {
   </div>
 
   {% assign all_tags_string = '' %}
-  {% for post in site.posts %}
+  {% assign visible_posts = site.posts | where_exp: 'item', 'item.listed != false' %}
+  {% assign visible_notes = site.notes | where_exp: 'item', 'item.listed != false' %}
+  {% for post in visible_posts %}
     {% assign post_tags_string = post.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
     {% assign post_tag_list = post_tags_string | split: '|' %}
     {% for tag in post_tag_list %}
@@ -144,7 +146,7 @@ h1, h2, h3 {
       {% endif %}
     {% endfor %}
   {% endfor %}
-  {% for note in site.notes %}
+  {% for note in visible_notes %}
     {% assign note_tags_string = note.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
     {% assign note_tag_list = note_tags_string | split: '|' %}
     {% for tag in note_tag_list %}
@@ -157,16 +159,16 @@ h1, h2, h3 {
 
   <div class="tag-cloud">
     {% for tag in all_tags %}
-      {% assign tagged_posts = site.posts | where_exp: 'item', 'item.tags contains tag' %}
-      {% assign tagged_notes = site.notes | where_exp: 'item', 'item.tags contains tag' %}
+      {% assign tagged_posts = visible_posts | where_exp: 'item', 'item.tags contains tag' %}
+      {% assign tagged_notes = visible_notes | where_exp: 'item', 'item.tags contains tag' %}
       {% assign total_count = tagged_posts.size | plus: tagged_notes.size %}
       <a class="tag-chip" href="#{{ tag | slugify }}">#{{ tag }} ({{ total_count }})</a>
     {% endfor %}
   </div>
 
   {% for tag in all_tags %}
-    {% assign tagged_posts = site.posts | where_exp: 'item', 'item.tags contains tag' %}
-    {% assign tagged_notes = site.notes | where_exp: 'item', 'item.tags contains tag' %}
+    {% assign tagged_posts = visible_posts | where_exp: 'item', 'item.tags contains tag' %}
+    {% assign tagged_notes = visible_notes | where_exp: 'item', 'item.tags contains tag' %}
     {% assign total_count = tagged_posts.size | plus: tagged_notes.size %}
     <section class="tag-section" id="{{ tag | slugify }}">
       <div class="tag-title">

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ page.title }}</title>
+<link rel="stylesheet" href="{{ '/style.css' | relative_url }}">
+<style>
+.profile-page {
+  max-width: 980px;
+  margin: 40px auto;
+  padding: 0 20px 56px;
+}
+
+.profile-hero,
+.profile-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-soft);
+}
+
+.profile-hero {
+  padding: 30px;
+  margin-bottom: 22px;
+  background: linear-gradient(180deg, var(--card), var(--panel));
+}
+
+.profile-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.profile-kicker {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--subtext);
+  margin-bottom: 8px;
+}
+
+.profile-title {
+  margin: 0 0 10px;
+  font-size: 42px;
+  line-height: 1.08;
+}
+
+.profile-lead {
+  margin: 0;
+  max-width: 760px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--subtext);
+}
+
+.profile-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.profile-link {
+  display: inline-block;
+  padding: 14px 18px;
+  border-radius: 16px;
+  text-decoration: none;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  font-weight: 600;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.95fr);
+  gap: 20px;
+}
+
+.profile-column {
+  display: grid;
+  gap: 20px;
+}
+
+.profile-card {
+  padding: 26px 28px;
+}
+
+.profile-card h2,
+.profile-card h3 {
+  margin-top: 0;
+}
+
+.profile-card h2 {
+  font-size: 24px;
+  margin-bottom: 14px;
+}
+
+.profile-card h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.profile-card p,
+.profile-card li,
+.profile-card ol,
+.profile-card ul {
+  line-height: 1.8;
+  color: var(--text);
+}
+
+.profile-card ul,
+.profile-card ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.profile-card p {
+  margin: 0;
+}
+
+.profile-divider {
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+@media (max-width: 920px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-title {
+    font-size: 34px;
+  }
+
+  .profile-topbar {
+    flex-wrap: wrap;
+  }
+}
+</style>
+</head>
+<body>
+<div class="profile-page">
+  <section class="profile-hero">
+    <div class="profile-topbar">
+      <div>
+        <div class="profile-kicker">Academic Profile</div>
+        <h1 class="profile-title">{{ page.title }}</h1>
+        {% if page.description %}
+        <p class="profile-lead">{{ page.description }}</p>
+        {% endif %}
+      </div>
+      <div class="profile-actions">
+        <a href="{{ '/' | relative_url }}" class="profile-link">Home</a>
+        <a href="{{ '/about/cv-template/' | relative_url }}" class="profile-link">CV</a>
+        <button class="theme-toggle" type="button" data-theme-toggle>🌓</button>
+      </div>
+    </div>
+  </section>
+
+  {{ content }}
+</div>
+<script src="{{ '/script.js' | relative_url }}"></script>
+</body>
+</html>

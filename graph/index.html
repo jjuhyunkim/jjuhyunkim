@@ -350,7 +350,9 @@ button {
 
 <script>
 const rawDocuments = [
-  {% for post in site.posts %}
+  {% assign visible_posts = site.posts | where_exp: 'item', 'item.listed != false' %}
+  {% assign visible_notes = site.notes | where_exp: 'item', 'item.listed != false' %}
+  {% for post in visible_posts %}
   {
     id: {{ 'post-' | append: forloop.index0 | jsonify }},
     kind: 'post',
@@ -362,7 +364,7 @@ const rawDocuments = [
     content: {{ post.content | strip_newlines | jsonify }}
   },
   {% endfor %}
-  {% for note in site.notes %}
+  {% for note in visible_notes %}
   {
     id: {{ 'note-' | append: forloop.index0 | jsonify }},
     kind: 'note',

@@ -1,6 +1,7 @@
 ---
 title: paper1
 date: 2026-06-20
+listed: false
 tags:
 	- paper
 references:

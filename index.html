@@ -297,7 +297,8 @@ button {
   </div>
 
   <div class="whats-new-strip">
-    {% assign recent_updates = site.whats_new | sort: 'date' | reverse %}
+    {% assign visible_updates = site.whats_new | where_exp: 'item', 'item.listed != false' %}
+    {% assign recent_updates = visible_updates | sort: 'date' | reverse %}
     {% for item in recent_updates limit: 10 %}
     <div class="whats-new-card">
       <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
@@ -316,7 +317,8 @@ button {
 
     <h2 class="section-title"><a href="{{ '/posts/' | relative_url }}">Posts</a></h2>
 
-    {% for post in site.posts limit: 5 %}
+    {% assign visible_posts = site.posts | where_exp: 'item', 'item.listed != false' %}
+    {% for post in visible_posts limit: 5 %}
     {% assign post_tags_string = post.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
     {% assign post_tag_list = post_tags_string | split: '|' %}
     <div class="post" data-title="{{ post.title }}" data-tags="{{ post_tag_list | join: ' ' }}">
@@ -325,6 +327,8 @@ button {
       <div class="date">
         {{ post.date | date: "%Y-%m-%d" }}
       </div>
+
+      <div class="whats-new-summary">{{ post.excerpt | strip_html | strip_newlines | truncate: 140 }}</div>
 
       <div class="tags">
         {% for tag in post_tag_list %}
@@ -338,7 +342,8 @@ button {
 
     <h2 class="section-title">Notes</h2>
 
-    {% assign sorted_notes = site.notes | sort: 'createdate' | reverse %}
+  {% assign visible_notes = site.notes | where_exp: 'item', 'item.listed != false' %}
+  {% assign sorted_notes = visible_notes | sort: 'createdate' | reverse %}
     {% for note in sorted_notes limit: 5 %}
     {% assign note_tags_string = note.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
     {% assign note_tag_list = note_tags_string | split: '|' %}
@@ -348,6 +353,8 @@ button {
       <div class="date">
         {{ note.createdate | default: note.date | date: "%Y-%m-%d" }}
       </div>
+
+      <div class="whats-new-summary">{{ note.excerpt | strip_html | strip_newlines | truncate: 140 }}</div>
 
       <div class="tags">
         {% for tag in note_tag_list %}
