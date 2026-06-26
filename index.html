@@ -247,6 +247,42 @@ button {
   color: var(--subtext);
 }
 
+.more-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px dashed var(--tag-text);
+  background: linear-gradient(165deg, rgba(59, 91, 219, 0.10), rgba(59, 91, 219, 0.03));
+}
+
+.more-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 18% 20%, rgba(59, 91, 219, 0.18), transparent 45%);
+  pointer-events: none;
+}
+
+.more-card a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 52px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  position: relative;
+  z-index: 1;
+}
+
+.more-card .whats-new-summary {
+  text-align: center;
+  margin-top: 6px;
+  color: var(--text);
+  opacity: 0.82;
+  position: relative;
+  z-index: 1;
+}
+
 .whats-new-meta {
   margin-top: 8px;
   font-size: 12px;
@@ -305,7 +341,7 @@ button {
       <div class="whats-new-summary">Create a document in _whats_new to show recent milestones here.</div>
     </div>
     {% endif %}
-    {% for item in recent_updates limit: 10 %}
+    {% for item in recent_updates limit: 5 %}
     <div class="whats-new-card">
       <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
       <div class="whats-new-meta">{{ item.date | date: "%Y-%m-%d" }}</div>
@@ -316,6 +352,12 @@ button {
       {% endif %}
     </div>
     {% endfor %}
+    {% if recent_updates.size > 5 %}
+    <div class="whats-new-card more-card">
+      <a class="more-link" href="{{ '/whats-new/' | relative_url }}">More ... →</a>
+      <div class="whats-new-summary">See all updates</div>
+    </div>
+    {% endif %}
   </div>
 
   <!-- POSTS -->
@@ -351,7 +393,14 @@ button {
     </div>
     {% endfor %}
 
-    <h2 class="section-title">Notes</h2>
+    {% if visible_posts.size > 5 %}
+    <div class="post more-card" data-title="more posts" data-tags="">
+      <a class="more-link" href="{{ '/posts/' | relative_url }}">More ... →</a>
+      <div class="whats-new-summary">Browse all posts</div>
+    </div>
+    {% endif %}
+
+    <h2 class="section-title"><a href="{{ '/notes/' | relative_url }}">Notes</a></h2>
 
   {% assign visible_notes = site.notes | where_exp: 'item', 'item.listed != false' %}
   {% assign sorted_notes = visible_notes | sort: 'createdate' | reverse %}
@@ -382,6 +431,13 @@ button {
     </div>
     {% endfor %}
 
+    {% if sorted_notes.size > 5 %}
+    <div class="post more-card" data-title="more notes" data-tags="">
+      <a class="more-link" href="{{ '/notes/' | relative_url }}">More ... →</a>
+      <div class="whats-new-summary">Browse all notes</div>
+    </div>
+    {% endif %}
+
   </div>
 
 </div>
@@ -396,8 +452,8 @@ function filterPosts() {
   let posts = document.querySelectorAll(".post");
 
   posts.forEach(post => {
-    let title = post.dataset.title.toLowerCase();
-    let tags = post.dataset.tags.toLowerCase();
+    let title = (post.dataset.title || "").toLowerCase();
+    let tags = (post.dataset.tags || "").toLowerCase();
 
     if (title.includes(input) || tags.includes(input)) {
       post.style.display = "block";

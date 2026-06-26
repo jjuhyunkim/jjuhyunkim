@@ -40,8 +40,6 @@
 .doc-sidebar {
   position: sticky;
   top: 24px;
-  display: grid;
-  gap: 16px;
 }
 
 .doc-panel,
@@ -60,34 +58,6 @@
 .doc-panel h3 {
   margin: 0 0 12px;
   color: var(--text);
-}
-
-.doc-meta-title {
-  font-size: 24px;
-  line-height: 1.2;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.doc-meta-line {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--subtext);
-}
-
-.doc-search {
-  width: 100%;
-  padding: 11px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--text);
-}
-
-.doc-search-results {
-  margin-top: 8px;
-  font-size: 12px;
-  color: var(--subtext);
 }
 
 .doc-tags {
@@ -138,6 +108,7 @@
   padding-left: 34px;
 }
 
+
 .doc-article {
   padding: 30px 34px 34px;
   min-height: 60vh;
@@ -186,22 +157,6 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 }
 
-.doc-section.is-hidden,
-.doc-toc-link.is-hidden {
-  display: none;
-}
-
-mark.doc-highlight {
-  background: #fff3a3;
-  color: #111;
-  padding: 0 2px;
-  border-radius: 4px;
-}
-
-body.dark mark.doc-highlight {
-  background: #d2b453;
-  color: #111;
-}
 
 @media (max-width: 980px) {
   .doc-layout {
@@ -237,25 +192,7 @@ body.dark mark.doc-highlight {
   <div class="doc-layout">
     <aside class="doc-sidebar">
       <section class="doc-panel">
-        <div class="doc-meta-title">{{ page.title }}</div>
-        <div class="doc-meta-line">
-          {% if page.date or page.createdate %}
-            {{ page.createdate | default: page.date | date: "%Y-%m-%d" }}
-          {% endif %}
-          {% if page.lasteditdate %}
-            <br>Updated: {{ page.lasteditdate | date: "%Y-%m-%d" }}
-          {% endif %}
-        </div>
-      </section>
-
-      <section class="doc-panel">
-        <h2>Search This Page</h2>
-        <input id="doc-search" class="doc-search" type="text" placeholder="Search headings and content">
-        <div id="doc-search-results" class="doc-search-results">Type to filter sections in this document.</div>
-      </section>
-
-      <section class="doc-panel">
-        <h2>Filter by Tag</h2>
+        <h2>Filter by Tag on this page</h2>
         <div class="doc-tags">
           {% assign page_tags_string = page.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
           {% assign page_tag_list = page_tags_string | split: '|' %}
@@ -290,100 +227,12 @@ function slugifyHeading(text) {
     .replace(/-+/g, '-');
 }
 
-function unwrapHighlights(root) {
-  root.querySelectorAll('mark.doc-highlight').forEach(mark => {
-    const textNode = document.createTextNode(mark.textContent || '');
-    mark.replaceWith(textNode);
-  });
-}
-
-function highlightText(root, query) {
-  if (!query) return 0;
-
-  let count = 0;
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-    acceptNode(node) {
-      if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
-      const parent = node.parentElement;
-      if (!parent) return NodeFilter.FILTER_REJECT;
-      if (['SCRIPT', 'STYLE', 'CODE', 'PRE', 'MARK'].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
-      return NodeFilter.FILTER_ACCEPT;
-    }
-  });
-
-  const nodes = [];
-  while (walker.nextNode()) nodes.push(walker.currentNode);
-
-  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const regex = new RegExp(escaped, 'gi');
-
-  nodes.forEach(node => {
-    const value = node.nodeValue;
-    if (!regex.test(value)) {
-      regex.lastIndex = 0;
-      return;
-    }
-
-    regex.lastIndex = 0;
-    const fragment = document.createDocumentFragment();
-    let lastIndex = 0;
-    let match;
-
-    while ((match = regex.exec(value)) !== null) {
-      const before = value.slice(lastIndex, match.index);
-      if (before) fragment.appendChild(document.createTextNode(before));
-
-      const mark = document.createElement('mark');
-      mark.className = 'doc-highlight';
-      mark.textContent = match[0];
-      fragment.appendChild(mark);
-      count += 1;
-      lastIndex = match.index + match[0].length;
-    }
-
-    const after = value.slice(lastIndex);
-    if (after) fragment.appendChild(document.createTextNode(after));
-    node.parentNode.replaceChild(fragment, node);
-  });
-
-  return count;
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   const content = document.getElementById('doc-content');
   const toc = document.getElementById('doc-toc');
-  const search = document.getElementById('doc-search');
-  const searchResults = document.getElementById('doc-search-results');
+  if (!content || !toc) return;
+
   const headings = Array.from(content.querySelectorAll('h2, h3, h4'));
-
-  const contentChildren = Array.from(content.children);
-  let introSection = document.createElement('section');
-  introSection.className = 'doc-section';
-  introSection.dataset.title = 'Introduction';
-  introSection.dataset.searchText = '';
-  let currentSection = introSection;
-  const sections = [];
-
-  contentChildren.forEach(child => {
-    const isSectionHeading = /H[234]/.test(child.tagName);
-
-    if (isSectionHeading) {
-      currentSection = document.createElement('section');
-      currentSection.className = 'doc-section';
-      currentSection.dataset.title = child.textContent.trim();
-      sections.push(currentSection);
-      content.insertBefore(currentSection, child);
-    } else if (!currentSection.isConnected) {
-      content.insertBefore(currentSection, child);
-    }
-
-    currentSection.appendChild(child);
-  });
-
-  if (introSection.childNodes.length > 0) {
-    sections.unshift(introSection);
-    content.insertBefore(introSection, content.firstChild);
-  }
 
   headings.forEach((heading, index) => {
     if (!heading.id) {
@@ -398,47 +247,16 @@ document.addEventListener('DOMContentLoaded', () => {
     toc.appendChild(link);
   });
 
-  sections.forEach(section => {
-    section.dataset.searchText = section.textContent.toLowerCase();
-  });
-
   const tocLinks = Array.from(toc.querySelectorAll('.doc-toc-link'));
 
   function updateActiveToc() {
+    if (headings.length === 0) return;
     const current = headings.findLast(heading => heading.getBoundingClientRect().top <= 120) || headings[0];
     tocLinks.forEach(link => {
       link.classList.toggle('active', current && link.dataset.targetId === current.id);
     });
   }
 
-  function applySearch() {
-    const query = search.value.trim().toLowerCase();
-    unwrapHighlights(content);
-
-    let visibleCount = 0;
-    sections.forEach(section => {
-      const matches = !query || section.dataset.searchText.includes(query);
-      section.classList.toggle('is-hidden', !matches);
-      if (matches) visibleCount += 1;
-    });
-
-    tocLinks.forEach(link => {
-      const target = document.getElementById(link.dataset.targetId);
-      const parentSection = target ? target.closest('.doc-section') : null;
-      const hidden = !parentSection || parentSection.classList.contains('is-hidden');
-      link.classList.toggle('is-hidden', hidden);
-    });
-
-    const hits = highlightText(content, query);
-
-    if (!query) {
-      searchResults.textContent = 'Type to filter sections in this document.';
-    } else {
-      searchResults.textContent = `${visibleCount} section${visibleCount === 1 ? '' : 's'} visible, ${hits} match${hits === 1 ? '' : 'es'} highlighted.`;
-    }
-  }
-
-  search.addEventListener('input', applySearch);
   window.addEventListener('scroll', updateActiveToc, { passive: true });
   updateActiveToc();
 });
