@@ -182,6 +182,32 @@
   font-size: 13px;
 }
 
+.doc-lang-toggle {
+  display: none;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+
+.doc-lang-toggle.show {
+  display: flex;
+}
+
+.doc-lang-btn {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.doc-lang-btn.active {
+  border-color: var(--tag-text);
+  color: var(--tag-text);
+  font-weight: 700;
+}
+
 
 @media (max-width: 980px) {
   .doc-layout {
@@ -236,6 +262,10 @@
     </aside>
 
     <article class="doc-article">
+      <div id="doc-lang-toggle" class="doc-lang-toggle" aria-label="Language toggle">
+        <button type="button" class="doc-lang-btn" data-doc-lang-btn="ko">KOR</button>
+        <button type="button" class="doc-lang-btn" data-doc-lang-btn="en">ENG</button>
+      </div>
       <div id="doc-content" class="doc-content">{{ content }}</div>
     </article>
   </div>
@@ -255,28 +285,81 @@ function slugifyHeading(text) {
 document.addEventListener('DOMContentLoaded', () => {
   const content = document.getElementById('doc-content');
   const toc = document.getElementById('doc-toc');
+  const langToggle = document.getElementById('doc-lang-toggle');
   if (!content || !toc) return;
 
-  const headings = Array.from(content.querySelectorAll('h2, h3, h4'));
+  const langKo = content.querySelector('.lang-ko');
+  const langEn = content.querySelector('.lang-en');
+  let headings = [];
 
-  headings.forEach((heading, index) => {
-    if (!heading.id) {
-      heading.id = `${slugifyHeading(heading.textContent)}-${index}`;
+  const buildToc = () => {
+    toc.innerHTML = '';
+
+    headings = Array.from(content.querySelectorAll('h2, h3, h4')).filter((heading) => {
+      const style = window.getComputedStyle(heading);
+      return style.display !== 'none' && style.visibility !== 'hidden';
+    });
+
+    headings.forEach((heading, index) => {
+      if (!heading.id) {
+        heading.id = `${slugifyHeading(heading.textContent)}-${index}`;
+      }
+
+      const link = document.createElement('a');
+      link.href = `#${heading.id}`;
+      link.className = `doc-toc-link level-${heading.tagName.toLowerCase()}`;
+      link.textContent = heading.textContent.trim();
+      link.dataset.targetId = heading.id;
+      toc.appendChild(link);
+    });
+  };
+
+  if (langToggle && langKo && langEn) {
+    const storageKey = `doc-lang:${window.location.pathname}`;
+
+    const setLang = (lang) => {
+      const showKo = lang !== 'en';
+      langKo.style.display = showKo ? '' : 'none';
+      langEn.style.display = showKo ? 'none' : '';
+
+      langToggle.querySelectorAll('[data-doc-lang-btn]').forEach((button) => {
+        button.classList.toggle('active', button.getAttribute('data-doc-lang-btn') === (showKo ? 'ko' : 'en'));
+      });
+
+      try {
+        localStorage.setItem(storageKey, showKo ? 'ko' : 'en');
+      } catch (error) {
+        // Ignore storage failures.
+      }
+    };
+
+    langToggle.classList.add('show');
+
+    langToggle.querySelectorAll('[data-doc-lang-btn]').forEach((button) => {
+      button.addEventListener('click', () => {
+        setLang(button.getAttribute('data-doc-lang-btn'));
+        buildToc();
+        updateActiveToc();
+      });
+    });
+
+    let initial = 'ko';
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved === 'ko' || saved === 'en') initial = saved;
+    } catch (error) {
+      // Ignore storage failures.
     }
 
-    const link = document.createElement('a');
-    link.href = `#${heading.id}`;
-    link.className = `doc-toc-link level-${heading.tagName.toLowerCase()}`;
-    link.textContent = heading.textContent.trim();
-    link.dataset.targetId = heading.id;
-    toc.appendChild(link);
-  });
+    setLang(initial);
+  }
 
-  const tocLinks = Array.from(toc.querySelectorAll('.doc-toc-link'));
+  buildToc();
 
   function updateActiveToc() {
     if (headings.length === 0) return;
     const current = headings.findLast(heading => heading.getBoundingClientRect().top <= 120) || headings[0];
+    const tocLinks = Array.from(toc.querySelectorAll('.doc-toc-link'));
     tocLinks.forEach(link => {
       link.classList.toggle('active', current && link.dataset.targetId === current.id);
     });

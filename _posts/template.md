@@ -11,6 +11,8 @@ references:
 
 # Paper Review Template (Biology / Bioinformatics)
 
+<div class="lang-ko" markdown="1">
+
 > Graph tips
 > - Use `references:` for explicit links to other posts or notes.
 > - Use exact document titles for the safest graph matching.
@@ -252,3 +254,182 @@ Biological Interpretation
 
 *
 ---
+</div>
+
+<div class="lang-en" markdown="1">
+
+# Paper Review Template (Biology / Bioinformatics)
+
+> Graph tips
+> - Use `references:` for explicit links to related posts or notes.
+> - Use exact document titles for safer graph matching.
+> - You can also link with `[[Exact Document Title]]` or standard Markdown links.
+
+## Basic Information
+
+> citation
+
+---
+
+# 1. One-Sentence Summary
+
+> This paper investigates/develops/analyzes _______________________________.
+
+---
+
+# 2. Background
+
+## Biological Problem
+
+* Study subject:
+* Why it matters:
+* Prior knowledge:
+* Remaining gap:
+
+---
+
+# 3. Research Question
+
+### Main Question
+
+* What is the central question addressed by this paper?
+
+### Hypothesis
+
+* What hypothesis do the authors test?
+
+---
+
+# 4. Methods
+
+## Experimental Design
+
+### Samples
+
+* Organism:
+* Cell type:
+* Sample size:
+* Controls:
+
+### Experimental Methods
+
+* [ ] RNA-seq
+* [ ] scRNA-seq
+* [ ] ChIP-seq
+* [ ] ATAC-seq
+* [ ] CRISPR
+* [ ] Proteomics
+* [ ] Microscopy
+* [ ] Animal model
+* [ ] Other:
+
+### Key Procedures
+
+1.
+2.
+3.
+
+---
+
+## Bioinformatics / Computational Analysis
+
+### Data Source
+
+* Public dataset:
+* Newly generated data:
+* Database:
+
+### Pipeline
+
+```text
+Raw Data
+ ↓
+QC
+ ↓
+Alignment
+ ↓
+Quantification
+ ↓
+Statistical Analysis
+ ↓
+Visualization
+ ↓
+Biological Interpretation
+```
+
+---
+
+# 5. Results
+
+## Figure-by-Figure Summary
+
+### Figure 1
+
+**Question**
+
+*
+
+**Method**
+
+*
+
+**Key Result**
+
+*
+
+**Interpretation**
+
+*
+
+---
+
+# 6. Major Findings
+
+## Finding 1
+
+### Evidence
+
+*
+
+### Why Important?
+
+*
+
+---
+
+# 7. Biological Significance
+
+### What Did We Learn?
+
+*
+
+### Impact on the Field
+
+*
+
+### Clinical / Translational Relevance
+
+*
+
+---
+
+# 8. Personal Notes
+
+## Interesting Points
+
+*
+
+## Confusing Points
+
+*
+
+## New Techniques Learned
+
+*
+
+## Ideas for My Research
+
+*
+
+---
+</div>
