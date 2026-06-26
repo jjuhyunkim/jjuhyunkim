@@ -7,3 +7,18 @@ collections:
   about_me:
     output: true
     permalink: /about/:name/
+  whats_new:
+    output: true
+    permalink: /whats-new/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "document"
+  - scope:
+      path: ""
+      type: "notes"
+    values:
+      layout: "document"

@@ -7,15 +7,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Knowledge Graph</title>
+<link rel="stylesheet" href="{{ '/style.css' | relative_url }}">
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
 <style>
 :root {
-  --bg: #f6f7fb;
-  --card: #ffffff;
-  --text: #111;
-  --subtext: #666;
-  --line: rgba(0, 0, 0, 0.08);
+  --line: var(--border);
   --tag: #3b5bdb;
   --post: #0f766e;
   --note: #b45309;
@@ -23,7 +20,6 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: var(--bg);
   color: var(--text);
 }
@@ -105,7 +101,7 @@ h1 {
 .stat-card {
   padding: 12px 14px;
   border-radius: 12px;
-  background: #fafbff;
+  background: var(--panel);
   border: 1px solid var(--line);
 }
 
@@ -177,6 +173,11 @@ button {
   cursor: pointer;
 }
 
+.theme-toggle {
+  background: var(--card);
+  color: var(--text);
+}
+
 .graph-shell {
   padding: 8px;
 }
@@ -201,7 +202,7 @@ button {
   gap: 6px;
   padding: 6px 10px;
   border-radius: 999px;
-  background: #fafbff;
+  background: var(--panel);
   border: 1px solid var(--line);
   font-size: 12px;
   color: var(--subtext);
@@ -236,8 +237,8 @@ button {
   display: inline-block;
   padding: 6px 10px;
   border-radius: 999px;
-  background: #eef2ff;
-  color: #3b5bdb;
+  background: var(--tag-bg);
+  color: var(--tag-text);
   font-size: 12px;
 }
 
@@ -272,7 +273,10 @@ button {
       <h1>Knowledge Graph</h1>
       <p class="subtitle">Interactive graph across all posts and notes. Large central nodes are frequently used tags. Smaller nodes are documents. Document-to-document links are created from <code>references:</code> in front matter or <code>[[Document Title]]</code> in the body.</p>
     </div>
-    <a href="{{ '/' | relative_url }}">Back to home</a>
+    <div class="theme-toggle-row">
+      <a href="{{ '/' | relative_url }}">Back to home</a>
+      <button class="theme-toggle" type="button" data-theme-toggle>🌓</button>
+    </div>
   </div>
 
   <div class="layout">
@@ -535,9 +539,10 @@ documents.forEach(doc => {
 
   nodes.push({
     id: doc.id,
-    label: doc.title,
+    label: '',
     group: doc.kind,
-    title: doc.title,
+    title: `${doc.kind.toUpperCase()}: ${doc.title}`,
+    displayTitle: doc.title,
     url: doc.url,
     tags: doc.tags,
     date: doc.date,
@@ -643,6 +648,7 @@ const filterState = {
 };
 
 const originalNodeStyle = new Map(nodes.map(node => [node.id, {
+  label: node.label,
   color: node.color,
   font: node.font,
   hidden: false
@@ -721,7 +727,7 @@ function renderDetails(nodeId) {
   const connectedDocs = connected.filter(item => item.group !== 'tag' && item.id !== nodeId);
 
   details.innerHTML = `
-    <div class="detail-title">${node.label}</div>
+    <div class="detail-title">${node.displayTitle || node.label}</div>
     <div class="detail-meta">${node.kind} ${node.date ? `| ${node.date}` : ''}</div>
     <div class="detail-tags">${connectedTags.map(item => `<span class="chip">${item.label}</span>`).join('')}</div>
     <div class="detail-meta">Referenced connections: ${connectedDocs.length}</div>
@@ -733,6 +739,7 @@ function renderDetails(nodeId) {
 function resetGraphEmphasis() {
   graphData.nodes.update(nodes.map(node => ({
     id: node.id,
+    label: originalNodeStyle.get(node.id).label,
     color: originalNodeStyle.get(node.id).color,
     font: originalNodeStyle.get(node.id).font,
     hidden: !filterState[node.group]
@@ -768,12 +775,14 @@ function emphasizeNeighborhood(nodeId) {
     if (connectedNodeIds.has(node.id)) {
       return {
         id: node.id,
+        label: node.group === 'tag' ? originalNodeStyle.get(node.id).label : (node.id === nodeId ? (node.displayTitle || '') : ''),
         font: { ...originalNodeStyle.get(node.id).font, color: '#111827' }
       };
     }
 
     return {
       id: node.id,
+      label: node.group === 'tag' ? originalNodeStyle.get(node.id).label : '',
       color: {
         background: 'rgba(203, 213, 225, 0.22)',
         border: 'rgba(148, 163, 184, 0.3)'
@@ -890,5 +899,6 @@ document.getElementById('toggleNotes').addEventListener('change', event => {
   applyVisibilityFilter();
 });
 </script>
+<script src="{{ '/script.js' | relative_url }}"></script>
 </body>
 </html>

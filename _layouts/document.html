@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ page.title }}</title>
+<link rel="stylesheet" href="{{ '/style.css' | relative_url }}">
+
+<style>
+.doc-page {
+  max-width: 1320px;
+  margin: 28px auto;
+  padding: 0 18px 40px;
+}
+
+.doc-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.doc-topbar a {
+  color: var(--subtext);
+  text-decoration: none;
+}
+
+.doc-topbar a:hover {
+  text-decoration: underline;
+}
+
+.doc-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.doc-sidebar {
+  position: sticky;
+  top: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.doc-panel,
+.doc-article {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+.doc-panel {
+  padding: 18px;
+}
+
+.doc-panel h2,
+.doc-panel h3 {
+  margin: 0 0 12px;
+  color: var(--text);
+}
+
+.doc-meta-title {
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.doc-meta-line {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--subtext);
+}
+
+.doc-search {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.doc-search-results {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--subtext);
+}
+
+.doc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.doc-tag {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.doc-toc {
+  display: grid;
+  gap: 6px;
+  max-height: 50vh;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.doc-toc-link {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--subtext);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.doc-toc-link:hover,
+.doc-toc-link.active {
+  background: var(--panel);
+  color: var(--text);
+}
+
+.doc-toc-link.level-h3 {
+  padding-left: 22px;
+}
+
+.doc-toc-link.level-h4 {
+  padding-left: 34px;
+}
+
+.doc-article {
+  padding: 30px 34px 34px;
+  min-height: 60vh;
+}
+
+.doc-content {
+  color: var(--text);
+}
+
+.doc-content > h1:first-child {
+  font-size: 40px;
+  line-height: 1.1;
+  margin-top: 0;
+}
+
+.doc-content h2,
+.doc-content h3,
+.doc-content h4 {
+  scroll-margin-top: 24px;
+}
+
+.doc-content p,
+.doc-content li,
+.doc-content blockquote {
+  line-height: 1.85;
+  color: var(--text);
+}
+
+.doc-content blockquote {
+  margin-left: 0;
+  padding: 10px 14px;
+  border-left: 4px solid var(--tag-text);
+  background: var(--panel);
+  border-radius: 0 12px 12px 0;
+}
+
+.doc-content pre {
+  overflow: auto;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+
+.doc-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+.doc-section.is-hidden,
+.doc-toc-link.is-hidden {
+  display: none;
+}
+
+mark.doc-highlight {
+  background: #fff3a3;
+  color: #111;
+  padding: 0 2px;
+  border-radius: 4px;
+}
+
+body.dark mark.doc-highlight {
+  background: #d2b453;
+  color: #111;
+}
+
+@media (max-width: 980px) {
+  .doc-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .doc-sidebar {
+    position: static;
+  }
+
+  .doc-toc {
+    max-height: none;
+  }
+
+  .doc-article {
+    padding: 22px;
+  }
+
+  .doc-content > h1:first-child {
+    font-size: 32px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="doc-page">
+  <div class="doc-topbar">
+    <a href="{{ '/' | relative_url }}">Back to home</a>
+    <button class="theme-toggle" type="button" data-theme-toggle>🌓</button>
+  </div>
+
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <section class="doc-panel">
+        <div class="doc-meta-title">{{ page.title }}</div>
+        <div class="doc-meta-line">
+          {% if page.date or page.createdate %}
+            {{ page.createdate | default: page.date | date: "%Y-%m-%d" }}
+          {% endif %}
+          {% if page.lasteditdate %}
+            <br>Updated: {{ page.lasteditdate | date: "%Y-%m-%d" }}
+          {% endif %}
+        </div>
+      </section>
+
+      <section class="doc-panel">
+        <h2>Search This Page</h2>
+        <input id="doc-search" class="doc-search" type="text" placeholder="Search headings and content">
+        <div id="doc-search-results" class="doc-search-results">Type to filter sections in this document.</div>
+      </section>
+
+      <section class="doc-panel">
+        <h2>Filter by Tag</h2>
+        <div class="doc-tags">
+          {% for tag in page.tags %}
+            <a class="doc-tag" href="{{ '/tags/#' | append: (tag | slugify) | relative_url }}">#{{ tag }}</a>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="doc-panel">
+        <h2>On This Page</h2>
+        <nav id="doc-toc" class="doc-toc"></nav>
+      </section>
+    </aside>
+
+    <article class="doc-article">
+      <div id="doc-content" class="doc-content">{{ content }}</div>
+    </article>
+  </div>
+</div>
+
+<script src="{{ '/script.js' | relative_url }}"></script>
+<script>
+function slugifyHeading(text) {
+  return String(text || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+function unwrapHighlights(root) {
+  root.querySelectorAll('mark.doc-highlight').forEach(mark => {
+    const textNode = document.createTextNode(mark.textContent || '');
+    mark.replaceWith(textNode);
+  });
+}
+
+function highlightText(root, query) {
+  if (!query) return 0;
+
+  let count = 0;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      const parent = node.parentElement;
+      if (!parent) return NodeFilter.FILTER_REJECT;
+      if (['SCRIPT', 'STYLE', 'CODE', 'PRE', 'MARK'].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(escaped, 'gi');
+
+  nodes.forEach(node => {
+    const value = node.nodeValue;
+    if (!regex.test(value)) {
+      regex.lastIndex = 0;
+      return;
+    }
+
+    regex.lastIndex = 0;
+    const fragment = document.createDocumentFragment();
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(value)) !== null) {
+      const before = value.slice(lastIndex, match.index);
+      if (before) fragment.appendChild(document.createTextNode(before));
+
+      const mark = document.createElement('mark');
+      mark.className = 'doc-highlight';
+      mark.textContent = match[0];
+      fragment.appendChild(mark);
+      count += 1;
+      lastIndex = match.index + match[0].length;
+    }
+
+    const after = value.slice(lastIndex);
+    if (after) fragment.appendChild(document.createTextNode(after));
+    node.parentNode.replaceChild(fragment, node);
+  });
+
+  return count;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const content = document.getElementById('doc-content');
+  const toc = document.getElementById('doc-toc');
+  const search = document.getElementById('doc-search');
+  const searchResults = document.getElementById('doc-search-results');
+  const headings = Array.from(content.querySelectorAll('h2, h3, h4'));
+
+  const contentChildren = Array.from(content.children);
+  let introSection = document.createElement('section');
+  introSection.className = 'doc-section';
+  introSection.dataset.title = 'Introduction';
+  introSection.dataset.searchText = '';
+  let currentSection = introSection;
+  const sections = [];
+
+  contentChildren.forEach(child => {
+    const isSectionHeading = /H[234]/.test(child.tagName);
+
+    if (isSectionHeading) {
+      currentSection = document.createElement('section');
+      currentSection.className = 'doc-section';
+      currentSection.dataset.title = child.textContent.trim();
+      sections.push(currentSection);
+      content.insertBefore(currentSection, child);
+    } else if (!currentSection.isConnected) {
+      content.insertBefore(currentSection, child);
+    }
+
+    currentSection.appendChild(child);
+  });
+
+  if (introSection.childNodes.length > 0) {
+    sections.unshift(introSection);
+    content.insertBefore(introSection, content.firstChild);
+  }
+
+  headings.forEach((heading, index) => {
+    if (!heading.id) {
+      heading.id = `${slugifyHeading(heading.textContent)}-${index}`;
+    }
+
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.className = `doc-toc-link level-${heading.tagName.toLowerCase()}`;
+    link.textContent = heading.textContent.trim();
+    link.dataset.targetId = heading.id;
+    toc.appendChild(link);
+  });
+
+  sections.forEach(section => {
+    section.dataset.searchText = section.textContent.toLowerCase();
+  });
+
+  const tocLinks = Array.from(toc.querySelectorAll('.doc-toc-link'));
+
+  function updateActiveToc() {
+    const current = headings.findLast(heading => heading.getBoundingClientRect().top <= 120) || headings[0];
+    tocLinks.forEach(link => {
+      link.classList.toggle('active', current && link.dataset.targetId === current.id);
+    });
+  }
+
+  function applySearch() {
+    const query = search.value.trim().toLowerCase();
+    unwrapHighlights(content);
+
+    let visibleCount = 0;
+    sections.forEach(section => {
+      const matches = !query || section.dataset.searchText.includes(query);
+      section.classList.toggle('is-hidden', !matches);
+      if (matches) visibleCount += 1;
+    });
+
+    tocLinks.forEach(link => {
+      const target = document.getElementById(link.dataset.targetId);
+      const parentSection = target ? target.closest('.doc-section') : null;
+      const hidden = !parentSection || parentSection.classList.contains('is-hidden');
+      link.classList.toggle('is-hidden', hidden);
+    });
+
+    const hits = highlightText(content, query);
+
+    if (!query) {
+      searchResults.textContent = 'Type to filter sections in this document.';
+    } else {
+      searchResults.textContent = `${visibleCount} section${visibleCount === 1 ? '' : 's'} visible, ${hits} match${hits === 1 ? '' : 'es'} highlighted.`;
+    }
+  }
+
+  search.addEventListener('input', applySearch);
+  window.addEventListener('scroll', updateActiveToc, { passive: true });
+  updateActiveToc();
+});
+</script>
+</body>
+</html>

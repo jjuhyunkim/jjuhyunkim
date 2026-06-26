@@ -7,20 +7,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tags</title>
+<link rel="stylesheet" href="{{ '/style.css' | relative_url }}">
 
 <style>
-:root {
-  --bg: #f6f7fb;
-  --card: #ffffff;
-  --text: #111;
-  --subtext: #666;
-  --tag-bg: #eef2ff;
-  --tag-text: #3b5bdb;
-}
-
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: var(--bg);
   color: var(--text);
 }
@@ -137,7 +128,10 @@ h1, h2, h3 {
       <h1>Tags</h1>
       <p class="subtitle">Browse posts and notes grouped by shared topics</p>
     </div>
-    <a href="{{ '/' | relative_url }}">Back to home</a>
+    <div class="theme-toggle-row">
+      <a href="{{ '/' | relative_url }}">Back to home</a>
+      <button class="theme-toggle" type="button" data-theme-toggle>🌓</button>
+    </div>
   </div>
 
   {% assign all_tags_string = '' %}
@@ -194,5 +188,6 @@ h1, h2, h3 {
     </section>
   {% endfor %}
 </div>
+<script src="{{ '/script.js' | relative_url }}"></script>
 </body>
 </html>

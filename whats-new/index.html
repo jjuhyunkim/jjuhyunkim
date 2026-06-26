@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>All Posts</title>
+<title>What's New</title>
 <link rel="stylesheet" href="{{ '/style.css' | relative_url }}">
 
 <style>
@@ -17,7 +17,7 @@ body {
 }
 
 .container {
-  max-width: 900px;
+  max-width: 920px;
   margin: 40px auto;
   padding: 0 20px 40px;
 }
@@ -48,31 +48,31 @@ h1 {
   margin: 8px 0 0;
 }
 
-.post {
+.update-card {
   background: var(--card);
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 14px;
   margin-bottom: 14px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
 
-.post-title {
+.update-title {
   font-size: 20px;
-  font-weight: 600;
-  text-decoration: none;
+  font-weight: 700;
   color: var(--text);
+  text-decoration: none;
 }
 
-.date {
+.update-meta {
+  margin-top: 6px;
   font-size: 12px;
   color: var(--subtext);
-  margin-top: 6px;
 }
 
-.excerpt {
-  margin-top: 12px;
+.update-summary {
+  margin-top: 10px;
+  color: var(--subtext);
   line-height: 1.6;
-  color: var(--text);
 }
 
 .tags {
@@ -96,8 +96,8 @@ h1 {
 <div class="container">
   <div class="topbar">
     <div>
-      <h1>All Posts</h1>
-      <p class="subtitle">All paper reading posts in reverse chronological order</p>
+      <h1>What's New</h1>
+      <p class="subtitle">All updates, milestones, and recent events in reverse chronological order</p>
     </div>
     <div class="theme-toggle-row">
       <a href="{{ '/' | relative_url }}">Back to home</a>
@@ -105,23 +105,28 @@ h1 {
     </div>
   </div>
 
-  {% for post in site.posts %}
-  <div class="post">
-    <a class="post-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+  {% assign updates = site.whats_new | sort: 'date' | reverse %}
+  {% for item in updates %}
+  <div class="update-card">
+    <a class="update-title" href="{{ item.url | relative_url }}">{{ item.title }}</a>
 
-    <div class="date">
-      {{ post.date | date: "%Y-%m-%d" }}
+    <div class="update-meta">
+      {{ item.date | date: "%Y-%m-%d" }}
     </div>
 
-    <div class="excerpt">
-      {{ post.excerpt | strip_html | strip_newlines | truncate: 260 }}
-    </div>
+    {% if item.summary %}
+    <div class="update-summary">{{ item.summary }}</div>
+    {% elsif item.excerpt %}
+    <div class="update-summary">{{ item.excerpt | strip_html | strip_newlines | truncate: 240 }}</div>
+    {% endif %}
 
+    {% if item.tags %}
     <div class="tags">
-      {% for tag in post.tags %}
+      {% for tag in item.tags %}
         <a class="tag" href="{{ '/tags/#' | append: (tag | slugify) | relative_url }}">#{{ tag }}</a>
       {% endfor %}
     </div>
+    {% endif %}
   </div>
   {% endfor %}
 </div>

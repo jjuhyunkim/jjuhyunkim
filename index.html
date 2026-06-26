@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Juhyun Kim</title>
+<link rel="stylesheet" href="{{ '/style.css' | relative_url }}">
 
 <style>
 /* ======================
@@ -131,6 +132,18 @@ h1 {
   text-decoration: underline;
 }
 
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-caption {
+  font-size: 13px;
+  color: var(--subtext);
+}
+
 input {
   flex: 1;
   padding: 10px;
@@ -189,6 +202,56 @@ button {
   color: var(--tag-text);
   cursor: pointer;
 }
+
+.whats-new-strip {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 4px 2px 12px;
+  margin-bottom: 22px;
+  scroll-snap-type: x proximity;
+}
+
+.whats-new-strip::-webkit-scrollbar {
+  height: 8px;
+}
+
+.whats-new-strip::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+  border-radius: 999px;
+}
+
+.whats-new-card {
+  flex: 0 0 240px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(245,247,255,0.92));
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  scroll-snap-align: start;
+}
+
+.whats-new-card a {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.whats-new-summary {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--subtext);
+}
+
+.whats-new-meta {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--subtext);
+}
 </style>
 </head>
 
@@ -199,7 +262,7 @@ button {
   <!-- HEADER -->
   <div class="header">
     <h1>Juhyun Kim</h1>
-    <button onclick="toggleDark()">🌓</button>
+    <button class="theme-toggle" type="button" data-theme-toggle>🌓</button>
   </div>
 
   <p class="subtitle">Bioinformatician / Postdoctoral Researcher</p>
@@ -226,6 +289,26 @@ button {
   <!-- SEARCH -->
   <div class="controls">
     <input id="search" placeholder="Search ..." onkeyup="filterPosts()" />
+  </div>
+
+  <div class="section-header">
+    <h2 class="section-title"><a href="{{ '/whats-new/' | relative_url }}">What's New</a></h2>
+    <span class="section-caption">Recent events and updates, scroll sideways</span>
+  </div>
+
+  <div class="whats-new-strip">
+    {% assign recent_updates = site.whats_new | sort: 'date' | reverse %}
+    {% for item in recent_updates limit: 10 %}
+    <div class="whats-new-card">
+      <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+      <div class="whats-new-meta">{{ item.date | date: "%Y-%m-%d" }}</div>
+      {% if item.summary %}
+      <div class="whats-new-summary">{{ item.summary }}</div>
+      {% elsif item.excerpt %}
+      <div class="whats-new-summary">{{ item.excerpt | strip_html | strip_newlines | truncate: 110 }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
   </div>
 
   <!-- POSTS -->
@@ -298,10 +381,9 @@ function filterTag(tag) {
   filterPosts();
 }
 
-function toggleDark() {
-  document.body.classList.toggle("dark");
-}
 </script>
+
+<script src="{{ '/script.js' | relative_url }}"></script>
 
 </body>
 </html>
