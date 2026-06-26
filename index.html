@@ -194,8 +194,9 @@ button {
 
 .tag {
   display: inline-block;
-  font-size: 10px;
-  padding: 3px 8px;
+  font-size: 8px;
+  line-height: 1.2;
+  padding: 2px 6px;
   margin-right: 5px;
   border-radius: 6px;
   background: var(--tag-bg);
@@ -336,11 +337,6 @@ button {
     <div class="whats-new-card">
       <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
       <div class="whats-new-meta">{{ item.date | date: "%Y-%m-%d" }}</div>
-      {% if item.summary %}
-      <div class="whats-new-summary">{{ item.summary }}</div>
-      {% elsif item.excerpt %}
-      <div class="whats-new-summary">{{ item.excerpt | strip_html | strip_newlines | truncate: 110 }}</div>
-      {% endif %}
     </div>
     {% endfor %}
     {% if recent_updates.size > 5 %}
@@ -370,8 +366,6 @@ button {
       <div class="date">
         {{ post.date | date: "%Y-%m-%d" }}
       </div>
-
-      <div class="whats-new-summary">{{ post.excerpt | strip_html | strip_newlines | truncate: 140 }}</div>
 
       <div class="tags">
         {% for tag in post_tag_list %}
@@ -407,8 +401,6 @@ button {
       <div class="date">
         {{ note.createdate | default: note.date | date: "%Y-%m-%d" }}
       </div>
-
-      <div class="whats-new-summary">{{ note.excerpt | strip_html | strip_newlines | truncate: 140 }}</div>
 
       <div class="tags">
         {% for tag in note_tag_list %}
