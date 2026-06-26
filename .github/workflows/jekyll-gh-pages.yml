@@ -15,10 +15,9 @@ permissions:
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# Keep only the latest workflow run for this branch so stale builds do not reach deployment.
 concurrency:
-  group: "pages"
+  group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
@@ -40,6 +39,9 @@ jobs:
 
   # Deployment job
   deploy:
+    concurrency:
+      group: github-pages
+      cancel-in-progress: true
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
