@@ -317,7 +317,9 @@ button {
     <h2 class="section-title"><a href="{{ '/posts/' | relative_url }}">Posts</a></h2>
 
     {% for post in site.posts limit: 5 %}
-    <div class="post" data-title="{{ post.title }}" data-tags="{{ post.tags | join: ' ' }}">
+    {% assign post_tags_string = post.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
+    {% assign post_tag_list = post_tags_string | split: '|' %}
+    <div class="post" data-title="{{ post.title }}" data-tags="{{ post_tag_list | join: ' ' }}">
       <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
 
       <div class="date">
@@ -325,8 +327,10 @@ button {
       </div>
 
       <div class="tags">
-        {% for tag in post.tags %}
+        {% for tag in post_tag_list %}
+          {% if tag != '' %}
           <a class="tag" href="{{ '/tags/#' | append: (tag | slugify) | relative_url }}">#{{ tag }}</a>
+          {% endif %}
         {% endfor %}
       </div>
     </div>
@@ -336,7 +340,9 @@ button {
 
     {% assign sorted_notes = site.notes | sort: 'createdate' | reverse %}
     {% for note in sorted_notes limit: 5 %}
-    <div class="post" data-title="{{ note.title }}" data-tags="{{ note.tags | join: ' ' }}">
+    {% assign note_tags_string = note.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
+    {% assign note_tag_list = note_tags_string | split: '|' %}
+    <div class="post" data-title="{{ note.title }}" data-tags="{{ note_tag_list | join: ' ' }}">
       <a href="{{ note.url | relative_url }}">{{ note.title }}</a>
 
       <div class="date">
@@ -344,8 +350,10 @@ button {
       </div>
 
       <div class="tags">
-        {% for tag in note.tags %}
+        {% for tag in note_tag_list %}
+          {% if tag != '' %}
           <a class="tag" href="{{ '/tags/#' | append: (tag | slugify) | relative_url }}">#{{ tag }}</a>
+          {% endif %}
         {% endfor %}
       </div>
     </div>

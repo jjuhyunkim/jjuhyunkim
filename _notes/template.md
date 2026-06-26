@@ -2,7 +2,9 @@
 title: note title
 createdate: 2026-06-26
 lasteditdate: 2026-06-26
-tags: project method
+tags:
+  - project
+  - method
 references:
   - Related post title
   - Related note title

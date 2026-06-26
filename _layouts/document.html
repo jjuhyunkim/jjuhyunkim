@@ -257,8 +257,12 @@ body.dark mark.doc-highlight {
       <section class="doc-panel">
         <h2>Filter by Tag</h2>
         <div class="doc-tags">
-          {% for tag in page.tags %}
+          {% assign page_tags_string = page.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
+          {% assign page_tag_list = page_tags_string | split: '|' %}
+          {% for tag in page_tag_list %}
+            {% if tag != '' %}
             <a class="doc-tag" href="{{ '/tags/#' | append: (tag | slugify) | relative_url }}">#{{ tag }}</a>
+            {% endif %}
           {% endfor %}
         </div>
       </section>

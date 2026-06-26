@@ -136,13 +136,21 @@ h1, h2, h3 {
 
   {% assign all_tags_string = '' %}
   {% for post in site.posts %}
-    {% for tag in post.tags %}
+    {% assign post_tags_string = post.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
+    {% assign post_tag_list = post_tags_string | split: '|' %}
+    {% for tag in post_tag_list %}
+      {% if tag != '' %}
       {% assign all_tags_string = all_tags_string | append: '|' | append: tag %}
+      {% endif %}
     {% endfor %}
   {% endfor %}
   {% for note in site.notes %}
-    {% for tag in note.tags %}
+    {% assign note_tags_string = note.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
+    {% assign note_tag_list = note_tags_string | split: '|' %}
+    {% for tag in note_tag_list %}
+      {% if tag != '' %}
       {% assign all_tags_string = all_tags_string | append: '|' | append: tag %}
+      {% endif %}
     {% endfor %}
   {% endfor %}
   {% assign all_tags = all_tags_string | remove_first: '|' | split: '|' | uniq | sort %}
