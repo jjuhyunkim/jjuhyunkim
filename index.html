@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Paper Notes</title>
+<title>Juhyun Kim</title>
 
 <style>
 /* ======================
@@ -71,6 +71,64 @@ h1 {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+}
+
+.nav-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.nav-button {
+  display: block;
+  padding: 18px;
+  border-radius: 16px;
+  background: var(--card);
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.06);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.nav-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+}
+
+.nav-label {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.nav-meta {
+  display: block;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--subtext);
+}
+
+@media (max-width: 640px) {
+  .nav-links {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section-title {
+  margin: 28px 0 12px;
+  font-size: 20px;
+}
+
+.section-title a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.section-title a:hover {
+  text-decoration: underline;
 }
 
 input {
@@ -140,21 +198,34 @@ button {
 
   <!-- HEADER -->
   <div class="header">
-    <h1>📚 Paper Notes</h1>
+    <h1>Juhyun Kim</h1>
     <button onclick="toggleDark()">🌓</button>
   </div>
 
-  <p class="subtitle">Bio / Bioinformatics reading log</p>
+  <p class="subtitle">Bioinformatician / Postdoctoral Researcher</p>
+
+  <div class="nav-links">
+    <a class="nav-button" href="{{ '/about/' | relative_url }}">
+      <span class="nav-label">About</span>
+      <span class="nav-meta">Research profile, academic background, and selected publications</span>
+    </a>
+    <a class="nav-button" href="{{ '/about/cv-template/' | relative_url }}">
+      <span class="nav-label">CV</span>
+      <span class="nav-meta">Full academic CV template with publications, talks, awards, and service</span>
+    </a>
+  </div>
 
   <!-- SEARCH -->
   <div class="controls">
-    <input id="search" placeholder="Search papers..." onkeyup="filterPosts()" />
+    <input id="search" placeholder="Search ..." onkeyup="filterPosts()" />
   </div>
 
   <!-- POSTS -->
   <div id="posts">
 
-    {% for post in site.posts %}
+    <h2 class="section-title"><a href="{{ '/posts/' | relative_url }}">Posts</a></h2>
+
+    {% for post in site.posts limit: 5 %}
     <div class="post" data-title="{{ post.title }}" data-tags="{{ post.tags | join: ' ' }}">
       <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
 
@@ -164,6 +235,25 @@ button {
 
       <div class="tags">
         {% for tag in post.tags %}
+          <span class="tag" onclick="filterTag('{{ tag }}')">#{{ tag }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+
+    <h2 class="section-title">Notes</h2>
+
+    {% assign sorted_notes = site.notes | sort: 'createdate' | reverse %}
+    {% for note in sorted_notes limit: 5 %}
+    <div class="post" data-title="{{ note.title }}" data-tags="{{ note.tags | join: ' ' }}">
+      <a href="{{ note.url | relative_url }}">{{ note.title }}</a>
+
+      <div class="date">
+        {{ note.createdate | default: note.date | date: "%Y-%m-%d" }}
+      </div>
+
+      <div class="tags">
+        {% for tag in note.tags %}
           <span class="tag" onclick="filterTag('{{ tag }}')">#{{ tag }}</span>
         {% endfor %}
       </div>

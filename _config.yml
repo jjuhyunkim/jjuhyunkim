@@ -1,1 +1,9 @@
-baseurl: "/"
+baseurl: ""
+
+collections:
+  notes:
+    output: true
+    permalink: /notes/:name/
+  about_me:
+    output: true
+    permalink: /about/:name/
