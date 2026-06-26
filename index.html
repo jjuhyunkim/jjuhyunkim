@@ -299,6 +299,12 @@ button {
   <div class="whats-new-strip">
     {% assign visible_updates = site.whats_new | where_exp: 'item', 'item.listed != false' %}
     {% assign recent_updates = visible_updates | sort: 'date' | reverse %}
+    {% if recent_updates.size == 0 %}
+    <div class="whats-new-card">
+      <strong>No updates yet</strong>
+      <div class="whats-new-summary">Create a document in _whats_new to show recent milestones here.</div>
+    </div>
+    {% endif %}
     {% for item in recent_updates limit: 10 %}
     <div class="whats-new-card">
       <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
@@ -318,6 +324,11 @@ button {
     <h2 class="section-title"><a href="{{ '/posts/' | relative_url }}">Posts</a></h2>
 
     {% assign visible_posts = site.posts | where_exp: 'item', 'item.listed != false' %}
+    {% if visible_posts.size == 0 %}
+    <div class="post">
+      <div>No posts found. Add a markdown file in _posts with valid front matter.</div>
+    </div>
+    {% endif %}
     {% for post in visible_posts limit: 5 %}
     {% assign post_tags_string = post.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
     {% assign post_tag_list = post_tags_string | split: '|' %}
@@ -344,6 +355,11 @@ button {
 
   {% assign visible_notes = site.notes | where_exp: 'item', 'item.listed != false' %}
   {% assign sorted_notes = visible_notes | sort: 'createdate' | reverse %}
+    {% if sorted_notes.size == 0 %}
+    <div class="post">
+      <div>No notes found. Add a markdown file in _notes with valid front matter.</div>
+    </div>
+    {% endif %}
     {% for note in sorted_notes limit: 5 %}
     {% assign note_tags_string = note.tags | join: '|' | replace: ', ', '|' | replace: ',', '|' | replace: ' ', '|' %}
     {% assign note_tag_list = note_tags_string | split: '|' %}

@@ -3,10 +3,10 @@ title: paper1
 date: 2026-06-20
 listed: false
 tags:
-	- paper
+  - paper
 references:
-	- Related paper title
-	- Related note title
+  - Related paper title
+  - Related note title
 ---
 
 # Paper Review Template (Biology / Bioinformatics)
