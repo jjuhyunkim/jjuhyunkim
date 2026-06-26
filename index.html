@@ -213,6 +213,14 @@ button {
       <span class="nav-label">CV</span>
       <span class="nav-meta">Full academic CV template with publications, talks, awards, and service</span>
     </a>
+    <a class="nav-button" href="{{ '/tags/' | relative_url }}">
+      <span class="nav-label">Tags</span>
+      <span class="nav-meta">Browse posts and notes grouped together by topic tags</span>
+    </a>
+    <a class="nav-button" href="{{ '/graph/' | relative_url }}">
+      <span class="nav-label">Graph</span>
+      <span class="nav-meta">Interactive tag and note graph with document references, Obsidian style</span>
+    </a>
   </div>
 
   <!-- SEARCH -->
@@ -235,7 +243,7 @@ button {
 
       <div class="tags">
         {% for tag in post.tags %}
-          <span class="tag" onclick="filterTag('{{ tag }}')">#{{ tag }}</span>
+          <a class="tag" href="{{ '/tags/#' | append: (tag | slugify) | relative_url }}">#{{ tag }}</a>
         {% endfor %}
       </div>
     </div>
@@ -254,7 +262,7 @@ button {
 
       <div class="tags">
         {% for tag in note.tags %}
-          <span class="tag" onclick="filterTag('{{ tag }}')">#{{ tag }}</span>
+          <a class="tag" href="{{ '/tags/#' | append: (tag | slugify) | relative_url }}">#{{ tag }}</a>
         {% endfor %}
       </div>
     </div>

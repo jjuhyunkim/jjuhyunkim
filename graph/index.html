@@ -1,0 +1,894 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Graph</title>
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+
+<style>
+:root {
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --text: #111;
+  --subtext: #666;
+  --line: rgba(0, 0, 0, 0.08);
+  --tag: #3b5bdb;
+  --post: #0f766e;
+  --note: #b45309;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  max-width: 1300px;
+  margin: 32px auto;
+  padding: 0 20px 32px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.topbar a {
+  color: var(--subtext);
+  text-decoration: none;
+}
+
+.topbar a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  margin: 0;
+}
+
+.subtitle {
+  color: var(--subtext);
+  margin: 8px 0 0;
+  max-width: 800px;
+  line-height: 1.5;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr) 320px;
+  gap: 18px;
+}
+
+.panel,
+.graph-shell {
+  background: var(--card);
+  border-radius: 18px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--line);
+}
+
+.panel {
+  padding: 18px;
+}
+
+.panel h2 {
+  margin: 0 0 14px;
+  font-size: 18px;
+}
+
+.panel p,
+.panel li {
+  color: var(--subtext);
+  line-height: 1.5;
+}
+
+.panel ul {
+  padding-left: 18px;
+  margin: 8px 0 0;
+}
+
+.stats {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.stat-card {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fafbff;
+  border: 1px solid var(--line);
+}
+
+.stat-label {
+  display: block;
+  font-size: 12px;
+  color: var(--subtext);
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.control-group {
+  margin-bottom: 18px;
+}
+
+.control-group label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: var(--subtext);
+}
+
+.filter-list {
+  display: grid;
+  gap: 8px;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.filter-item input {
+  width: auto;
+  margin: 0;
+}
+
+.control-row {
+  display: flex;
+  gap: 8px;
+}
+
+input,
+button {
+  font: inherit;
+}
+
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+}
+
+button {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  background: #111827;
+  color: white;
+  cursor: pointer;
+}
+
+.graph-shell {
+  padding: 8px;
+}
+
+#graph {
+  width: 100%;
+  height: 760px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(238, 242, 255, 0.35), rgba(255, 255, 255, 0.8));
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #fafbff;
+  border: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--subtext);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.detail-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.detail-meta {
+  font-size: 12px;
+  color: var(--subtext);
+  margin-bottom: 12px;
+}
+
+.detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.chip {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3b5bdb;
+  font-size: 12px;
+}
+
+.detail-list {
+  margin: 12px 0 0;
+  padding-left: 18px;
+}
+
+.detail-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  #graph {
+    height: 620px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+  <div class="topbar">
+    <div>
+      <h1>Knowledge Graph</h1>
+      <p class="subtitle">Interactive graph across all posts and notes. Large central nodes are frequently used tags. Smaller nodes are documents. Document-to-document links are created from <code>references:</code> in front matter or <code>[[Document Title]]</code> in the body.</p>
+    </div>
+    <a href="{{ '/' | relative_url }}">Back to home</a>
+  </div>
+
+  <div class="layout">
+    <aside class="panel">
+      <h2>Controls</h2>
+
+      <div class="stats">
+        <div class="stat-card">
+          <span class="stat-label">Documents</span>
+          <span class="stat-value" id="docCount">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Tags</span>
+          <span class="stat-value" id="tagCount">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Reference links</span>
+          <span class="stat-value" id="refCount">0</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="nodeSearch">Focus a tag or document</label>
+        <div class="control-row">
+          <input id="nodeSearch" list="nodeOptions" placeholder="Search title or tag">
+          <button id="focusButton" type="button">Focus</button>
+        </div>
+        <datalist id="nodeOptions"></datalist>
+      </div>
+
+      <div class="control-group">
+        <button id="fitButton" type="button">Reset view</button>
+      </div>
+
+      <div class="control-group">
+        <label>Show node types</label>
+        <div class="filter-list">
+          <label class="filter-item"><input id="toggleTags" type="checkbox" checked> Tags</label>
+          <label class="filter-item"><input id="togglePosts" type="checkbox" checked> Posts</label>
+          <label class="filter-item"><input id="toggleNotes" type="checkbox" checked> Notes</label>
+        </div>
+      </div>
+
+      <h2>How to link notes</h2>
+      <ul>
+        <li>Add <code>references:</code> in front matter, as a list or a string.</li>
+        <li>Or write <code>[[Exact Document Title]]</code> in the body.</li>
+        <li>Standard Markdown links like <code>[label](/notes/example/)</code> also create graph edges.</li>
+        <li>When a referenced title matches another post or note title, the graph connects them.</li>
+      </ul>
+
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#3b5bdb"></span>tag</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#0f766e"></span>post</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#b45309"></span>note</span>
+      </div>
+    </aside>
+
+    <section class="graph-shell">
+      <div id="graph"></div>
+    </section>
+
+    <aside class="panel">
+      <h2>Details</h2>
+      <div id="details">
+        <p>Select a node to inspect its tags, connections, and target link.</p>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const rawDocuments = [
+  {% for post in site.posts %}
+  {
+    id: {{ 'post-' | append: forloop.index0 | jsonify }},
+    kind: 'post',
+    title: {{ post.title | jsonify }},
+    url: {{ post.url | relative_url | jsonify }},
+    date: {{ post.date | date: "%Y-%m-%d" | jsonify }},
+    tags: {{ post.tags | jsonify }},
+    references: {{ post.references | default: '' | jsonify }},
+    content: {{ post.content | strip_newlines | jsonify }}
+  },
+  {% endfor %}
+  {% for note in site.notes %}
+  {
+    id: {{ 'note-' | append: forloop.index0 | jsonify }},
+    kind: 'note',
+    title: {{ note.title | jsonify }},
+    url: {{ note.url | relative_url | jsonify }},
+    date: {{ note.createdate | default: note.date | date: "%Y-%m-%d" | jsonify }},
+    tags: {{ note.tags | jsonify }},
+    references: {{ note.references | default: '' | jsonify }},
+    content: {{ note.content | strip_newlines | jsonify }}
+  },
+  {% endfor %}
+];
+
+function slugify(value) {
+  return String(value || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+function normalizeTags(value) {
+  if (Array.isArray(value)) {
+    return value.map(item => String(item).trim()).filter(Boolean);
+  }
+  if (typeof value === 'string') {
+    return value
+      .split(/[\n,]+|\s{1,}/)
+      .map(item => item.trim())
+      .filter(Boolean);
+  }
+  if (value == null) {
+    return [];
+  }
+  return [String(value).trim()].filter(Boolean);
+}
+
+function normalizeReferences(value) {
+  if (Array.isArray(value)) {
+    return value.map(item => String(item).trim()).filter(Boolean);
+  }
+  if (typeof value === 'string') {
+    return value
+      .split(/[\n,;|]+/)
+      .map(item => item.trim())
+      .filter(Boolean);
+  }
+  if (value == null) {
+    return [];
+  }
+  return [String(value).trim()].filter(Boolean);
+}
+
+function parseWikiReferences(content) {
+  const matches = [];
+  const regex = /\[\[([^\]]+)\]\]/g;
+  let match;
+
+  while ((match = regex.exec(content || '')) !== null) {
+    matches.push(match[1].trim());
+  }
+
+  return matches;
+}
+
+function parseMarkdownLinks(content) {
+  const matches = [];
+  const regex = /(?<!!)\[([^\]]+)\]\(([^)]+)\)/g;
+  let match;
+
+  while ((match = regex.exec(content || '')) !== null) {
+    matches.push({
+      text: match[1].trim(),
+      href: match[2].trim()
+    });
+  }
+
+  return matches;
+}
+
+function normalizeUrlReference(value) {
+  return String(value || '')
+    .trim()
+    .replace(/^https?:\/\/[^/]+/i, '')
+    .replace(/[?#].*$/, '')
+    .replace(/index\.html$/i, '')
+    .replace(/\.md$/i, '')
+    .replace(/\/$/, '')
+    .toLowerCase();
+}
+
+function colorFromTag(tag) {
+  let hash = 0;
+  const text = String(tag || 'tag');
+
+  for (let index = 0; index < text.length; index += 1) {
+    hash = text.charCodeAt(index) + ((hash << 5) - hash);
+  }
+
+  const hue = Math.abs(hash) % 360;
+  return {
+    background: `hsla(${hue}, 78%, 88%, 1)`,
+    border: `hsla(${hue}, 68%, 42%, 1)`,
+    highlightBackground: `hsla(${hue}, 80%, 82%, 1)`,
+    highlightBorder: `hsla(${hue}, 72%, 36%, 1)`,
+    edge: `hsla(${hue}, 68%, 42%, 0.26)`,
+    font: `hsla(${hue}, 74%, 28%, 1)`
+  };
+}
+
+function buildReferenceLookup(documents) {
+  const lookup = new Map();
+
+  documents.forEach(doc => {
+    const urlPart = doc.url.split('/').filter(Boolean).pop();
+    const keys = [
+      doc.title,
+      slugify(doc.title),
+      slugify(urlPart),
+      normalizeUrlReference(doc.url)
+    ]
+      .map(item => String(item || '').trim().toLowerCase())
+      .filter(Boolean);
+
+    keys.forEach(key => lookup.set(key, doc.id));
+  });
+
+  return lookup;
+}
+
+const documents = rawDocuments.map(doc => ({
+  ...doc,
+  tags: normalizeTags(doc.tags),
+  references: normalizeReferences(doc.references),
+  wikiReferences: parseWikiReferences(doc.content),
+  markdownLinks: parseMarkdownLinks(doc.content)
+}));
+
+const referenceLookup = buildReferenceLookup(documents);
+const tagUsage = new Map();
+const nodes = [];
+const edges = [];
+const edgeSet = new Set();
+
+documents.forEach(doc => {
+  doc.tags.forEach(tag => {
+    tagUsage.set(tag, (tagUsage.get(tag) || 0) + 1);
+  });
+});
+
+Array.from(tagUsage.entries())
+  .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+  .forEach(([tag, count]) => {
+    const tagColor = colorFromTag(tag);
+    nodes.push({
+      id: `tag:${tag}`,
+      label: `#${tag}`,
+      group: 'tag',
+      tag,
+      value: count,
+      size: 16 + count * 5,
+      color: {
+        background: tagColor.background,
+        border: tagColor.border,
+        highlight: { background: tagColor.highlightBackground, border: tagColor.highlightBorder }
+      },
+      font: { color: tagColor.font, size: 16, face: 'Segoe UI' }
+    });
+  });
+
+documents.forEach(doc => {
+  const color = doc.kind === 'post' ? '#0f766e' : '#b45309';
+
+  nodes.push({
+    id: doc.id,
+    label: doc.title,
+    group: doc.kind,
+    title: doc.title,
+    url: doc.url,
+    tags: doc.tags,
+    date: doc.date,
+    kind: doc.kind,
+    size: 10,
+    value: 1,
+    color: {
+      background: doc.kind === 'post' ? '#ccfbf1' : '#ffedd5',
+      border: color,
+      highlight: { background: doc.kind === 'post' ? '#99f6e4' : '#fed7aa', border: color }
+    },
+    font: { color: '#111827', size: 12, face: 'Segoe UI' }
+  });
+
+  doc.tags.forEach(tag => {
+    const tagColor = colorFromTag(tag);
+    const edgeId = `tag:${tag}-->${doc.id}`;
+    if (!edgeSet.has(edgeId)) {
+      edges.push({
+        id: edgeId,
+        from: `tag:${tag}`,
+        to: doc.id,
+        color: { color: tagColor.edge },
+        width: 1
+      });
+      edgeSet.add(edgeId);
+    }
+  });
+});
+
+let referenceEdgeCount = 0;
+
+documents.forEach(doc => {
+  const titleTargets = [...doc.references, ...doc.wikiReferences];
+  const markdownTargets = doc.markdownLinks
+    .map(link => {
+      const hrefTarget = referenceLookup.get(normalizeUrlReference(link.href));
+      const textTarget = referenceLookup.get(String(link.text || '').trim().toLowerCase()) || referenceLookup.get(slugify(link.text));
+      return hrefTarget || textTarget || null;
+    })
+    .filter(Boolean);
+
+  const targets = [
+    ...titleTargets.map(target => {
+      const normalized = String(target || '').trim().toLowerCase();
+      return referenceLookup.get(normalized) || referenceLookup.get(slugify(normalized)) || referenceLookup.get(normalizeUrlReference(target));
+    }),
+    ...markdownTargets
+  ].filter(Boolean);
+
+  targets.forEach(target => {
+    const targetId = target;
+
+    if (!targetId || targetId === doc.id) {
+      return;
+    }
+
+    const sortedPair = [doc.id, targetId].sort().join('<->');
+    const edgeId = `ref:${sortedPair}`;
+
+    if (!edgeSet.has(edgeId)) {
+      edges.push({
+        id: edgeId,
+        from: doc.id,
+        to: targetId,
+        color: { color: 'rgba(17, 24, 39, 0.35)' },
+        dashes: true,
+        width: 1.6,
+        smooth: { type: 'continuous' }
+      });
+      edgeSet.add(edgeId);
+      referenceEdgeCount += 1;
+    }
+  });
+});
+
+const nodeMap = new Map(nodes.map(node => [node.id, node]));
+const searchOptions = document.getElementById('nodeOptions');
+const details = document.getElementById('details');
+
+nodes
+  .slice()
+  .sort((left, right) => String(left.label).localeCompare(String(right.label)))
+  .forEach(node => {
+    const option = document.createElement('option');
+    option.value = node.label;
+    searchOptions.appendChild(option);
+  });
+
+document.getElementById('docCount').textContent = String(documents.length);
+document.getElementById('tagCount').textContent = String(tagUsage.size);
+document.getElementById('refCount').textContent = String(referenceEdgeCount);
+
+const graphData = {
+  nodes: new vis.DataSet(nodes),
+  edges: new vis.DataSet(edges)
+};
+
+const filterState = {
+  tag: true,
+  post: true,
+  note: true
+};
+
+const originalNodeStyle = new Map(nodes.map(node => [node.id, {
+  color: node.color,
+  font: node.font,
+  hidden: false
+}]));
+const originalEdgeStyle = new Map(edges.map(edge => [edge.id, {
+  color: edge.color,
+  width: edge.width,
+  dashes: edge.dashes || false,
+  hidden: false
+}]));
+
+const network = new vis.Network(
+  document.getElementById('graph'),
+  graphData,
+  {
+    autoResize: true,
+    interaction: {
+      hover: true,
+      navigationButtons: true,
+      keyboard: true,
+      tooltipDelay: 100
+    },
+    nodes: {
+      shape: 'dot',
+      borderWidth: 2
+    },
+    edges: {
+      smooth: false
+    },
+    physics: {
+      stabilization: { iterations: 180 },
+      barnesHut: {
+        gravitationalConstant: -5200,
+        centralGravity: 0.24,
+        springLength: 120,
+        springConstant: 0.04,
+        damping: 0.16
+      }
+    }
+  }
+);
+
+function isNodeVisible(nodeId) {
+  const node = nodeMap.get(nodeId);
+  return Boolean(node && filterState[node.group]);
+}
+
+function shouldShowEdge(edge) {
+  return isNodeVisible(edge.from) && isNodeVisible(edge.to);
+}
+
+function renderDetails(nodeId) {
+  const node = nodeMap.get(nodeId);
+
+  if (!node) {
+    details.innerHTML = '<p>Select a node to inspect its tags, connections, and target link.</p>';
+    return;
+  }
+
+  const connected = network.getConnectedNodes(nodeId)
+    .map(id => nodeMap.get(id))
+    .filter(Boolean)
+    .sort((left, right) => String(left.label).localeCompare(String(right.label)));
+
+  if (node.group === 'tag') {
+    const connectedDocs = connected.filter(item => item.group !== 'tag');
+    details.innerHTML = `
+      <div class="detail-title">#${node.tag}</div>
+      <div class="detail-meta">Used in ${connectedDocs.length} document${connectedDocs.length === 1 ? '' : 's'}</div>
+      <ul class="detail-list">${connectedDocs.map(item => `<li>${item.label}</li>`).join('')}</ul>
+    `;
+    return;
+  }
+
+  const connectedTags = connected.filter(item => item.group === 'tag');
+  const connectedDocs = connected.filter(item => item.group !== 'tag' && item.id !== nodeId);
+
+  details.innerHTML = `
+    <div class="detail-title">${node.label}</div>
+    <div class="detail-meta">${node.kind} ${node.date ? `| ${node.date}` : ''}</div>
+    <div class="detail-tags">${connectedTags.map(item => `<span class="chip">${item.label}</span>`).join('')}</div>
+    <div class="detail-meta">Referenced connections: ${connectedDocs.length}</div>
+    <ul class="detail-list">${connectedDocs.map(item => `<li>${item.label}</li>`).join('')}</ul>
+    <a class="detail-link" href="${node.url}">Open document</a>
+  `;
+}
+
+function resetGraphEmphasis() {
+  graphData.nodes.update(nodes.map(node => ({
+    id: node.id,
+    color: originalNodeStyle.get(node.id).color,
+    font: originalNodeStyle.get(node.id).font,
+    hidden: !filterState[node.group]
+  })));
+
+  graphData.edges.update(edges.map(edge => ({
+    id: edge.id,
+    color: originalEdgeStyle.get(edge.id).color,
+    width: originalEdgeStyle.get(edge.id).width,
+    dashes: originalEdgeStyle.get(edge.id).dashes,
+    hidden: !shouldShowEdge(edge)
+  })));
+}
+
+function emphasizeNeighborhood(nodeId) {
+  resetGraphEmphasis();
+
+  if (!nodeId) {
+    return;
+  }
+
+  const connectedNodeIds = new Set([nodeId, ...network.getConnectedNodes(nodeId)]);
+  const connectedEdgeIds = new Set(network.getConnectedEdges(nodeId));
+
+  graphData.nodes.update(nodes.map(node => {
+    if (!filterState[node.group]) {
+      return {
+        id: node.id,
+        hidden: true
+      };
+    }
+
+    if (connectedNodeIds.has(node.id)) {
+      return {
+        id: node.id,
+        font: { ...originalNodeStyle.get(node.id).font, color: '#111827' }
+      };
+    }
+
+    return {
+      id: node.id,
+      color: {
+        background: 'rgba(203, 213, 225, 0.22)',
+        border: 'rgba(148, 163, 184, 0.3)'
+      },
+      font: { ...originalNodeStyle.get(node.id).font, color: 'rgba(100, 116, 139, 0.45)' }
+    };
+  }));
+
+  graphData.edges.update(edges.map(edge => {
+    if (!shouldShowEdge(edge)) {
+      return {
+        id: edge.id,
+        hidden: true
+      };
+    }
+
+    if (connectedEdgeIds.has(edge.id)) {
+      return {
+        id: edge.id,
+        width: (originalEdgeStyle.get(edge.id).width || 1) + 1.4,
+        color: originalEdgeStyle.get(edge.id).color
+      };
+    }
+
+    return {
+      id: edge.id,
+      color: { color: 'rgba(203, 213, 225, 0.18)' },
+      width: 0.5
+    };
+  }));
+}
+
+function applyVisibilityFilter() {
+  const selectedNodeId = network.getSelectedNodes()[0] || null;
+
+  if (selectedNodeId && isNodeVisible(selectedNodeId)) {
+    emphasizeNeighborhood(selectedNodeId);
+    renderDetails(selectedNodeId);
+    return;
+  }
+
+  network.unselectAll();
+  resetGraphEmphasis();
+  renderDetails(null);
+}
+
+network.on('click', params => {
+  if (params.nodes.length === 0) {
+    resetGraphEmphasis();
+    renderDetails(null);
+    return;
+  }
+
+  emphasizeNeighborhood(params.nodes[0]);
+  renderDetails(params.nodes[0]);
+});
+
+network.on('doubleClick', params => {
+  if (params.nodes.length === 0) {
+    return;
+  }
+
+  const node = nodeMap.get(params.nodes[0]);
+  if (node && node.url) {
+    window.location.href = node.url;
+  }
+});
+
+document.getElementById('focusButton').addEventListener('click', () => {
+  const query = document.getElementById('nodeSearch').value.trim().toLowerCase();
+  if (!query) {
+    return;
+  }
+
+  const match = nodes.find(node => String(node.label).toLowerCase() === query)
+    || nodes.find(node => String(node.label).toLowerCase().includes(query));
+
+  if (!match) {
+    return;
+  }
+
+  if (!filterState[match.group]) {
+    return;
+  }
+
+  network.selectNodes([match.id]);
+  network.focus(match.id, {
+    scale: match.group === 'tag' ? 1.1 : 1.35,
+    animation: { duration: 600, easingFunction: 'easeInOutQuad' }
+  });
+  emphasizeNeighborhood(match.id);
+  renderDetails(match.id);
+});
+
+document.getElementById('fitButton').addEventListener('click', () => {
+  resetGraphEmphasis();
+  network.unselectAll();
+  network.fit({ animation: { duration: 600, easingFunction: 'easeInOutQuad' } });
+  renderDetails(null);
+});
+
+document.getElementById('toggleTags').addEventListener('change', event => {
+  filterState.tag = event.target.checked;
+  applyVisibilityFilter();
+});
+
+document.getElementById('togglePosts').addEventListener('change', event => {
+  filterState.post = event.target.checked;
+  applyVisibilityFilter();
+});
+
+document.getElementById('toggleNotes').addEventListener('change', event => {
+  filterState.note = event.target.checked;
+  applyVisibilityFilter();
+});
+</script>
+</body>
+</html>

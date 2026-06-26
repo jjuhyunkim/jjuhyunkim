@@ -2,15 +2,21 @@
 title: paper1
 date: 2026-06-20
 tags: paper
+references:
+	- Related paper title
+	- Related note title
 ---
 
 # Paper Review Template (Biology / Bioinformatics)
 
+> Graph tips
+> - Use `references:` for explicit links to other posts or notes.
+> - Use exact document titles for the safest graph matching.
+> - You can also link in the body with `[[Exact Document Title]]` or standard Markdown links like `[See note](/notes/example-note/)`.
+
 ## Basic Information
 
 > citation
-
-tags : 
 
 ---
 
