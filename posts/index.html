@@ -123,7 +123,7 @@ h1 {
     <div class="tags">
       {% for tag in post_tag_list %}
         {% if tag != '' %}
-        <a class="tag" href="{{ '/tags/#' | append: (tag | slugify) | relative_url }}">#{{ tag }}</a>
+        <a class="tag" href="{{ '/tags/' | relative_url }}#{{ tag | slugify }}">#{{ tag }}</a>
         {% endif %}
       {% endfor %}
     </div>

@@ -223,7 +223,7 @@
           {% assign page_tag_list = page_tags_string | split: '|' %}
           {% for tag in page_tag_list %}
             {% if tag != '' %}
-            <a class="doc-tag" href="{{ '/tags/#' | append: (tag | slugify) | relative_url }}">#{{ tag }}</a>
+            <a class="doc-tag" href="{{ '/tags/' | relative_url }}#{{ tag | slugify }}">#{{ tag }}</a>
             {% endif %}
           {% endfor %}
         </div>

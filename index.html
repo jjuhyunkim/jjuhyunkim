@@ -194,7 +194,7 @@ button {
 
 .tag {
   display: inline-block;
-  font-size: 12px;
+  font-size: 10px;
   padding: 3px 8px;
   margin-right: 5px;
   border-radius: 6px;
@@ -274,15 +274,6 @@ button {
   z-index: 1;
 }
 
-.more-card .whats-new-summary {
-  text-align: center;
-  margin-top: 6px;
-  color: var(--text);
-  opacity: 0.82;
-  position: relative;
-  z-index: 1;
-}
-
 .whats-new-meta {
   margin-top: 8px;
   font-size: 12px;
@@ -355,7 +346,6 @@ button {
     {% if recent_updates.size > 5 %}
     <div class="whats-new-card more-card">
       <a class="more-link" href="{{ '/whats-new/' | relative_url }}">More ... →</a>
-      <div class="whats-new-summary">See all updates</div>
     </div>
     {% endif %}
   </div>
@@ -386,7 +376,7 @@ button {
       <div class="tags">
         {% for tag in post_tag_list %}
           {% if tag != '' %}
-          <a class="tag" href="{{ '/tags/#' | append: (tag | slugify) | relative_url }}">#{{ tag }}</a>
+          <a class="tag" href="{{ '/tags/' | relative_url }}#{{ tag | slugify }}">#{{ tag }}</a>
           {% endif %}
         {% endfor %}
       </div>
@@ -396,7 +386,6 @@ button {
     {% if visible_posts.size > 5 %}
     <div class="post more-card" data-title="more posts" data-tags="">
       <a class="more-link" href="{{ '/posts/' | relative_url }}">More ... →</a>
-      <div class="whats-new-summary">Browse all posts</div>
     </div>
     {% endif %}
 
@@ -424,7 +413,7 @@ button {
       <div class="tags">
         {% for tag in note_tag_list %}
           {% if tag != '' %}
-          <a class="tag" href="{{ '/tags/#' | append: (tag | slugify) | relative_url }}">#{{ tag }}</a>
+          <a class="tag" href="{{ '/tags/' | relative_url }}#{{ tag | slugify }}">#{{ tag }}</a>
           {% endif %}
         {% endfor %}
       </div>
@@ -434,7 +423,6 @@ button {
     {% if sorted_notes.size > 5 %}
     <div class="post more-card" data-title="more notes" data-tags="">
       <a class="more-link" href="{{ '/notes/' | relative_url }}">More ... →</a>
-      <div class="whats-new-summary">Browse all notes</div>
     </div>
     {% endif %}
 

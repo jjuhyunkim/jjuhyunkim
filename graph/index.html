@@ -14,8 +14,8 @@
 :root {
   --line: var(--border);
   --tag: #3b5bdb;
-  --post: #0f766e;
-  --note: #b45309;
+  --post: #4b5563;
+  --note: #9ca3af;
 }
 
 body {
@@ -240,6 +240,7 @@ button {
   background: var(--tag-bg);
   color: var(--tag-text);
   font-size: 12px;
+  text-decoration: none;
 }
 
 .detail-list {
@@ -330,8 +331,8 @@ button {
 
       <div class="legend">
         <span class="legend-item"><span class="legend-dot" style="background:#3b5bdb"></span>tag</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#0f766e"></span>post</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#b45309"></span>note</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#4b5563"></span>post</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#9ca3af"></span>note</span>
       </div>
     </aside>
 
@@ -348,6 +349,7 @@ button {
   </div>
 </div>
 
+<script src="{{ '/script.js' | relative_url }}"></script>
 <script>
 const rawDocuments = [
   {% assign visible_posts = site.posts | where_exp: 'item', 'item.listed != false' %}
@@ -458,6 +460,18 @@ function normalizeUrlReference(value) {
 }
 
 function colorFromTag(tag) {
+  if (window.getTagColor) {
+    const shared = window.getTagColor(tag);
+    return {
+      background: shared.background,
+      border: shared.border,
+      highlightBackground: shared.highlightBackground,
+      highlightBorder: shared.highlightBorder,
+      edge: shared.edge,
+      font: shared.text
+    };
+  }
+
   let hash = 0;
   const text = String(tag || 'tag');
 
@@ -537,7 +551,7 @@ Array.from(tagUsage.entries())
   });
 
 documents.forEach(doc => {
-  const color = doc.kind === 'post' ? '#0f766e' : '#b45309';
+  const color = doc.kind === 'post' ? '#4b5563' : '#9ca3af';
 
   nodes.push({
     id: doc.id,
@@ -552,9 +566,9 @@ documents.forEach(doc => {
     size: 10,
     value: 1,
     color: {
-      background: doc.kind === 'post' ? '#ccfbf1' : '#ffedd5',
+      background: doc.kind === 'post' ? '#d1d5db' : '#e5e7eb',
       border: color,
-      highlight: { background: doc.kind === 'post' ? '#99f6e4' : '#fed7aa', border: color }
+      highlight: { background: doc.kind === 'post' ? '#9ca3af' : '#cbd5e1', border: color }
     },
     font: { color: '#111827', size: 12, face: 'Segoe UI' }
   });
@@ -731,7 +745,7 @@ function renderDetails(nodeId) {
   details.innerHTML = `
     <div class="detail-title">${node.displayTitle || node.label}</div>
     <div class="detail-meta">${node.kind} ${node.date ? `| ${node.date}` : ''}</div>
-    <div class="detail-tags">${connectedTags.map(item => `<span class="chip">${item.label}</span>`).join('')}</div>
+    <div class="detail-tags">${connectedTags.map(item => `<a class="chip" href="{{ '/tags/' | relative_url }}#${slugify(String(item.tag || item.label).replace(/^#/, ''))}">${item.label}</a>`).join('')}</div>
     <div class="detail-meta">Referenced connections: ${connectedDocs.length}</div>
     <ul class="detail-list">${connectedDocs.map(item => `<li>${item.label}</li>`).join('')}</ul>
     <a class="detail-link" href="${node.url}">Open document</a>
@@ -901,6 +915,5 @@ document.getElementById('toggleNotes').addEventListener('change', event => {
   applyVisibilityFilter();
 });
 </script>
-<script src="{{ '/script.js' | relative_url }}"></script>
 </body>
 </html>
